@@ -14,7 +14,7 @@ const UserSchema = new Schema({
     birthday: {type: Date},
     online_status: {type: Boolean, default: false},
     roles: {type: [String], require: true, default: 'user'},
-    opt_code: {type: String, maxLength: 6},
+    otp_code: {type: Number, maxLength: 6},
     account_status: {type: String, default: 'verify'},
     token: {type: String}
 }, {timestamps: true})

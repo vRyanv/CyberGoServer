@@ -5,7 +5,6 @@ module.exports = (app) =>{
     app.use('/sign-in', signInRouter)
     app.use('/sign-up', signUpRouter)
 
-
     // app.post('/test', multerUpload.single('image'),(req, res) =>{
     //     console.log(req.body);
     //     console.log(req.file);

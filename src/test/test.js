@@ -1,19 +1,26 @@
 require('dotenv').config({path: "src/.env"})
-const mail_service = require('../api/services/mail.service')
-
-
-
-let content = '<h1>Hello<h1>'
-async function mail(){
-    let result = await mail_service(
-        process.env.EMAIL,
-        'khangnngcc200043@fpt.edu.vn',
-        'cyber go test send mail',
-        content
-    )
-    console.log(result)
+// const mail_service = require('../api/services/mail.service')
+const user = require('../api/models/user.repository')
+const database = require('../config/connect-db')
+database.connect()
+const v8 = require('v8');
+async function a(){
+    const result1 = await user.searchByEmail('khangok1610@gmail.com')
+    console.log(result1)
 }
-mail()
+
+a()
+// let content = '<h1>Hello<h1>'
+// async function mail(){
+//     let result = await mail_service(
+//         process.env.EMAIL,
+//         'khangnngcc200043@fpt.edu.vn',
+//         'cyber go test send mail',
+//         content
+//     )
+//     console.log(result)
+// }
+// mail()
 
 // const accountSid = "ACc3434680f2645a9b6f528e047e307a7f";
 // const authToken = "cf743520ec44cf40ef54acdc77310266"

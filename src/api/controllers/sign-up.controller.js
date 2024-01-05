@@ -8,30 +8,33 @@ module.exports = {
         let errors = []
         let is_valid_email = false
         let email_used;
-        if (req.body.full_name == null) {
+
+        if (req.body.full_name === undefined || req.body.full_name.trim().length === 0) {
             errors.push('Full name is required')
+        } else {
+            if (req.body.full_name.trim().length < 2) {
+                errors.push('Full name must be at least 2 characters')
+            }
         }
-        if (req.body.full_name.trim().length < 2) {
-            errors.push('Full name must be at least 2 characters')
-        }
-        if (req.body.email == null) {
+
+        if (req.body.email === undefined || req.body.email.trim().length === 0) {
             errors.push('Email is required')
         } else {
             is_valid_email = validator.isEmail(req.body.email)
             if (!is_valid_email) {
                 errors.push('Invalid email address')
             } else {
-                email_used = await user_repo.searchUserByEmail(req.body.email)
+                email_used = await user_repo.searchByEmail(req.body.email)
                 if (email_used != null) {
                     errors.push('Email address already used by another user')
                 }
             }
         }
 
-        if (req.body.phone_number == null) {
+        if (req.body.phone_number === undefined || req.body.phone_number.trim().length === 0) {
             errors.push('Phone number is required')
         } else {
-            if (req.body.number_prefix == null) {
+            if (req.body.number_prefix === undefined || req.body.number_prefix.trim() === 0) {
                 errors.push('Number prefix is required')
             } else {
                 let full_phone_number = _getFullPhoneNumber(
@@ -41,7 +44,7 @@ module.exports = {
                 if (!validator.isMobilePhone(full_phone_number, 'any', {strictMode: true})) {
                     errors.push('Invalid phone number')
                 } else {
-                    let phone_number_existed = await user_repo.searchUserByPhoneNumber(req.body.phone_number)
+                    let phone_number_existed = await user_repo.searchByPhoneNumber(req.body.phone_number)
                     if (phone_number_existed != null) {
                         errors.push('Phone number address already used by another user')
                     }
@@ -49,7 +52,7 @@ module.exports = {
             }
         }
 
-        if (req.body.gender == null) {
+        if (req.body.gender === undefined) {
             errors.push('Gender is required')
         } else if (req.body.gender != 1 && req.body.gender != 2 && req.body.gender != 3) {
             errors.push('Invalid gender - must be 1 or 2 or 3')
@@ -60,10 +63,14 @@ module.exports = {
         }
 
         if (email_used != null && email_used.account_status === 'verify' && email_used.opt_code != null) {
-            return res.status(200).json({code: 200, verifying_account: true, message: 'Account is being verified, check in your mail'})
+            return res.status(200).json({
+                code: 200,
+                verifying_account: true,
+                message: 'Account is being verified, check in your mail'
+            })
         }
 
-        let OPT_code = _getOTPCode();
+        let OTP_code = _getOTPCode();
         let country = await country_repo.getCountryByPrefix(req.body.number_prefix)
 
         let user_schema = {
@@ -71,22 +78,55 @@ module.exports = {
             phone_number: req.body.phone_number,
             gender: req.body.gender,
             full_name: req.body.full_name,
-            opt_code: OPT_code,
+            otp_code: OTP_code,
             country_id: country._id
         }
 
-        // let create_user_result = await user_repo.createUser(user_schema)
+        await user_repo.create(user_schema)
 
-        await _sendMailConfirmRegisterAccount(
-            req.body.email,
-            req.body.full_name,
-            OPT_code
-        )
-        res.status(200).json({code: 201, is_sign_success: true , message: 'sign up success'})
+        // await _sendMailConfirmRegisterAccount(
+        //     req.body.email,
+        //     req.body.full_name,
+        //     OTP_code
+        // )
+        res.status(200).json({code: 201, is_sign_up_success: true, message: 'sign up success'})
 
     },
     async activeAccountAction(req, res) {
-        res.send({status: 200, data: req, message: 'active success success'})
+        let error = []
+        let email = req.body.email
+        let otp_code = req.body.otp_code
+
+        if (email === undefined) {
+            error.push('Email is required')
+        } else {
+            if(!validator.isEmail(email)){
+                error.push('Invalid email')
+            }
+        }
+        if (otp_code === undefined) {
+            error.push('OTP code is required')
+        } else {
+            if (otp_code.length < 6) {
+                error.push('OTP code must have 6 numbers')
+            }
+        }
+
+        if (error.length > 0) {
+            return res.status(200).json({code: 400, is_active_success: false, error})
+        }
+
+        let data_update = {
+            account_status: 'activated',
+            otp_code:123456
+        }
+
+        let user = await user_repo.updateActiveAccount({email, otp_code}, data_update)
+
+        return res.status(200).json({code: 200, user_id_activated: user._id, message: 'Account has been activated'})
+    },
+    async createPassword(req, res){
+
     },
     async checkPhoneExistedAction(req, res) {
         let prefix = req.params.prefix
@@ -98,7 +138,7 @@ module.exports = {
         } else if (!validator.isMobilePhone(_getFullPhoneNumber(prefix, phone_number), 'any', {strictMode: true})) {
             res.send({status: 400, message: 'Invalid phone number'})
         } else {
-            let user = await user_repo.searchUserByPhoneNumber(phone_number)
+            let user = await user_repo.searchByPhoneNumber(phone_number)
             if (user != null) {
                 res.send({status: 200, is_phone_existed: true, message: 'Phone number is existed'})
             } else {
@@ -113,7 +153,7 @@ module.exports = {
         } else if (!validator.isEmail(email)) {
             res.send({status: 400, message: 'Invalid email'})
         } else {
-            let user = await user_repo.searchUserByEmail(email)
+            let user = await user_repo.searchByEmail(email)
             if (user != null) {
                 res.send({status: 200, is_email_existed: true, message: 'Email is existed'})
             } else {
@@ -146,7 +186,7 @@ const _getFullPhoneNumber = (prefix, phone_number) => {
     return prefix + phone_number
 }
 
-const _createMailContent= (full_name, OPT_code)=>{
+const _createMailContent = (full_name, OPT_code) => {
     return `<!DOCTYPE html>
     <html lang="en">
         <head>
@@ -181,16 +221,6 @@ const _createMailContent= (full_name, OPT_code)=>{
         .content {
         padding: 20px;
         text-align: center;
-    }
-
-        /* Button styles */
-        .btn {
-        display: inline-block;
-        padding: 10px 20px;
-        color: #fff;
-        background-color: #009688;
-        text-decoration: none;
-        border-radius: 5px;
     }
     </style>
 </head>
