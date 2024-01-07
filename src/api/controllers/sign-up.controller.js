@@ -2,12 +2,17 @@ const user_repo = require('../models/user.repository')
 const country_repo = require('../models/country.repository')
 const validator = require('validator')
 const mail_service = require('../services/mail.service')
+const status_code = require('../constant/status-code')
+const jwt = require('../utils/jwt.util')
 
 module.exports = {
     async signUpAction(req, res) {
         let errors = []
         let is_valid_email = false
         let email_used;
+        let is_email_used = false
+        let is_phone_used = false
+
 
         if (req.body.full_name === undefined || req.body.full_name.trim().length === 0) {
             errors.push('Full name is required')
@@ -24,11 +29,19 @@ module.exports = {
             if (!is_valid_email) {
                 errors.push('Invalid email address')
             } else {
-                email_used = await user_repo.searchByEmail(req.body.email)
+                email_used = await user_repo.findByEmail(req.body.email)
                 if (email_used != null) {
                     errors.push('Email address already used by another user')
+                    is_email_used = true;
                 }
             }
+        }
+    
+        if (email_used != null && email_used.account_status === 'verify' && email_used.otp_code != 0) {
+            return res.status(200).json({
+                code: status_code.VERIFY,
+                message: 'Account is being verified, check in your mail'
+            })
         }
 
         if (req.body.phone_number === undefined || req.body.phone_number.trim().length === 0) {
@@ -41,12 +54,14 @@ module.exports = {
                     req.body.number_prefix,
                     req.body.phone_number
                 );
+                console.log(full_phone_number)
                 if (!validator.isMobilePhone(full_phone_number, 'any', {strictMode: true})) {
                     errors.push('Invalid phone number')
                 } else {
-                    let phone_number_existed = await user_repo.searchByPhoneNumber(req.body.phone_number)
+                    let phone_number_existed = await user_repo.findByPhoneNumber(req.body.phone_number)
                     if (phone_number_existed != null) {
-                        errors.push('Phone number address already used by another user')
+                        errors.push('Phone number already used by another user')
+                        is_phone_used = true;
                     }
                 }
             }
@@ -58,16 +73,19 @@ module.exports = {
             errors.push('Invalid gender - must be 1 or 2 or 3')
         }
 
-        if (errors.length > 0) {
-            return res.status(200).json({code: 400, errors})
+        if(req.body.password === undefined || req.body.password === ""){
+            errors.push('Password is required')
+        } else if(req.body.password.includes(" ")){
+            errors.push('Password can not contain space')
+        } else if(req.body.password.length < 8){ 
+            errors.push('Password must be greater than or equal to 8 character')
+        } else if(req.body.password !== req.body.confirm_password){
+            errors.push('Password and confirm password does not match')
         }
 
-        if (email_used != null && email_used.account_status === 'verify' && email_used.opt_code != null) {
-            return res.status(200).json({
-                code: 200,
-                verifying_account: true,
-                message: 'Account is being verified, check in your mail'
-            })
+        if (errors.length > 0) {
+            console.log(errors)
+            return res.status(200).json({code: status_code.BAD_REQUEST, is_email_used, is_phone_used, errors})
         }
 
         let OTP_code = _getOTPCode();
@@ -79,7 +97,8 @@ module.exports = {
             gender: req.body.gender,
             full_name: req.body.full_name,
             otp_code: OTP_code,
-            country_id: country._id
+            country_id: country._id,
+            password: req.body.password
         }
 
         await user_repo.create(user_schema)
@@ -89,41 +108,45 @@ module.exports = {
         //     req.body.full_name,
         //     OTP_code
         // )
-        res.status(200).json({code: 201, is_sign_up_success: true, message: 'sign up success'})
+        res.status(200).json({code: status_code.CREATED, is_sign_up_success: true, message: 'sign up success'})
 
     },
     async activeAccountAction(req, res) {
-        let error = []
+        let errors = []
         let email = req.body.email
         let otp_code = req.body.otp_code
-
+ 
         if (email === undefined) {
-            error.push('Email is required')
-        } else {
-            if(!validator.isEmail(email)){
-                error.push('Invalid email')
-            }
+            errors.push('Email is required')
+        } else  if(!validator.isEmail(email)){
+                errors.push('Invalid email')
         }
         if (otp_code === undefined) {
-            error.push('OTP code is required')
-        } else {
-            if (otp_code.length < 6) {
-                error.push('OTP code must have 6 numbers')
-            }
+            errors.push('OTP code is required')
+        } else if (otp_code.length < 5) {
+                error.push('OTP code must have 5 numbers')
         }
 
-        if (error.length > 0) {
-            return res.status(200).json({code: 400, is_active_success: false, error})
+        if (errors.length > 0) {
+            return res.status(200).json({code: status_code.BAD_REQUEST, is_active_success: false, errors})
         }
 
-        let data_update = {
+        let update_data = {
             account_status: 'activated',
-            otp_code:123456
+            otp_code:0
         }
 
-        let user = await user_repo.updateActiveAccount({email, otp_code}, data_update)
+        let update_conditions = {
+            email,
+            otp_code
+        }
 
-        return res.status(200).json({code: 200, user_id_activated: user._id, message: 'Account has been activated'})
+        let user = await user_repo.updateActiveAccount(update_conditions, update_data)
+        if(user == null){
+            return res.status(200).json({code:status_code.NOT_FOUND, message: 'Not found account of your email and OTP code'})
+        }       
+        let user_token = jwt.getUserToken(user._id.toString(), user.roles)
+        return res.status(200).json({code: status_code.UPDATED, user_token, message: 'Account has been activated'})
     },
     async createPassword(req, res){
 
@@ -176,7 +199,7 @@ const _sendMailConfirmRegisterAccount = async (to_email, full_name, OPT_code) =>
 
 const _getOTPCode = () => {
     let OPT_code = '';
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 5; i++) {
         OPT_code += Math.floor(Math.random() * 10);
     }
     return OPT_code

@@ -9,16 +9,16 @@ module.exports = {
     findByEmailAndPassword(email, password) {
         return User.findOne({email, password}).lean();
     },
-    searchByEmail(email) {
+    findByEmail(email) {
         return User.findOne({email}).lean()
     },
-    searchByPhoneNumber(phone_number) {
+    findByPhoneNumber(phone_number) {
         return User.findOne({phone_number}).lean();
     },
     create(user_shema) {
         return User.create(user_shema);
     },
-    updateActiveAccount({email, otp_code}, data_update) {
-        return User.findOneAndUpdate({email, otp_code}, data_update).lean()
+    updateActiveAccount(update_conditions, update_data) {
+        return User.findOneAndUpdate(update_conditions, update_data).lean()
     }
 }
