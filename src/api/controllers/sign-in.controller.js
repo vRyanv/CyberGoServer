@@ -28,10 +28,10 @@ module.exports =  {
 
         let user = await user_model.findByEmailAndPassword(email, password)
         if(user == null) {
-            res.status(200).json({code: status_code.NOT_FOUND, message: 'Not found any user'})
+            return res.status(200).json({code: status_code.NOT_FOUND, message: 'Not found any user'})
         } else{
             let token = getUserToken(user._id, user.roles)
-            res.status(200).json({code: status_code.OK, message: 'login success', token})
+            return res.status(200).json({code: status_code.OK, message: 'login success', token})
         }
     }
 }

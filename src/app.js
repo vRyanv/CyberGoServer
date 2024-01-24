@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser')
 var cors = require('cors')
 require('colors');
 
-const routes = require('./api/routes/index-route')
+const routes = require('./api/routes/index.route')
 
 const path = require('path')
 require('dotenv').config({path: "src/.env"})

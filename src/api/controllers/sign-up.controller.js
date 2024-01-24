@@ -54,7 +54,6 @@ module.exports = {
                     req.body.number_prefix,
                     req.body.phone_number
                 );
-                console.log(full_phone_number)
                 if (!validator.isMobilePhone(full_phone_number, 'any', {strictMode: true})) {
                     errors.push('Invalid phone number')
                 } else {
@@ -108,7 +107,7 @@ module.exports = {
         //     req.body.full_name,
         //     OTP_code
         // )
-        res.status(200).json({code: status_code.CREATED, is_sign_up_success: true, message: 'sign up success'})
+        return res.status(200).json({code: status_code.CREATED, is_sign_up_success: true, message: 'sign up success'})
 
     },
     async activeAccountAction(req, res) {
@@ -124,7 +123,7 @@ module.exports = {
         if (otp_code === undefined) {
             errors.push('OTP code is required')
         } else if (otp_code.length < 5) {
-                error.push('OTP code must have 5 numbers')
+            errors.push('OTP code must have 5 numbers')
         }
 
         if (errors.length > 0) {
@@ -155,32 +154,32 @@ module.exports = {
         let prefix = req.params.prefix
         let phone_number = req.params.phone_number
         if (prefix == null) {
-            res.send({status: 400, message: 'prefix is required'})
+            return res.send({status: 400, message: 'prefix is required'})
         } else if (phone_number == null) {
-            res.send({status: 400, message: 'Phone number is required'})
+            return res.send({status: 400, message: 'Phone number is required'})
         } else if (!validator.isMobilePhone(_getFullPhoneNumber(prefix, phone_number), 'any', {strictMode: true})) {
-            res.send({status: 400, message: 'Invalid phone number'})
+            return res.send({status: 400, message: 'Invalid phone number'})
         } else {
-            let user = await user_repo.searchByPhoneNumber(phone_number)
+            let user = await user_repo.findByPhoneNumber(phone_number)
             if (user != null) {
-                res.send({status: 200, is_phone_existed: true, message: 'Phone number is existed'})
+                return res.send({status: 200, is_phone_existed: true, message: 'Phone number is existed'})
             } else {
-                res.send({status: 200, is_phone_existed: false, message: 'Phone number has not been used yet'})
+                return res.send({status: 200, is_phone_existed: false, message: 'Phone number has not been used yet'})
             }
         }
     },
     async checkMailExistedAction(req, res) {
         let email = req.params.email
         if (email == null) {
-            res.send({status: 400, message: 'Email is required'})
+            return res.send({status: 400, message: 'Email is required'})
         } else if (!validator.isEmail(email)) {
-            res.send({status: 400, message: 'Invalid email'})
+            return res.send({status: 400, message: 'Invalid email'})
         } else {
             let user = await user_repo.searchByEmail(email)
             if (user != null) {
-                res.send({status: 200, is_email_existed: true, message: 'Email is existed'})
+                return res.send({status: 200, is_email_existed: true, message: 'Email is existed'})
             } else {
-                res.send({status: 200, is_email_existed: false, message: 'Email has not been used yet'})
+                return res.send({status: 200, is_email_existed: false, message: 'Email has not been used yet'})
             }
         }
     }

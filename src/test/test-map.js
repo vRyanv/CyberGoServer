@@ -1,9 +1,9 @@
 const mapService = require('../api/services/map.service')
 
 
-let lat = 11.218468421238196
-let long = 108.7355282789391
-// 11.218468421238196, 108.7355282789391
+let lat = 32.42961626387935
+let long = 105.80719863691581
+// 32.42961626387935, 105.80719863691581
 async function get(){
     let result = await mapService.ReverseGeoCoding(lat, long)
     console.log(result.data)

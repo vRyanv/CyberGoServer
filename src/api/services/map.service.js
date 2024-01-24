@@ -9,8 +9,7 @@ const mapService = {
         try {
             return await axios.request(options);
         } catch (error) {
-            console.error(error);
-            return null;
+            return error;
         }
     }
 }
