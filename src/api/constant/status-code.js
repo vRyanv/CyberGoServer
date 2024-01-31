@@ -5,6 +5,6 @@ module.exports = {
     DELETED: 203,
     VERIFY: 204,
     NOT_FOUND: 404,
-    UNAUTHEORIZED: 401,
+    UNAUTHORIZED: 401,
     BAD_REQUEST: 400
 }
