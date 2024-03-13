@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "cyberspace-409502",
+  "private_key_id": "478a7700427e3c13716e15405d98038fb9fa48e9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDZpByxieVyy1RS\nQ7AtFy4258/ULEzYRGc0sHiFkhYPWjFk4mDmSuYGSVB+GskKmKfH9mZzXVnysnIi\nB0qSkeJ0/+RmDPa7cQlWyXqnXRI18nWhRx/YCmEzzXNPcNKVWMQfjNMHo6bXW9qD\nXbUN//T4CY6s4bnhPSETJFNh/Ty504VdR6oV+9Op+Lq3+fApNmi5yhZprV+Q0OtE\nQyWwxSO6oMzGSnndEoajflr1xesiyKXTzRAtARZmhEcNAvQzWuxdPdv7VI+mlChW\nBP7vrKmDD+6UjHgYsLK1DPDKiHOEndoaFGBc6DOURg/lI3J6w/iazuP3K4G9Fgwj\naiYfmjITAgMBAAECggEAD6DLNqxyP3X+ThHyOqqpdOPcdp3fvr/asVviq6S71Mpj\nNZ1T2/WQ4u6sywFdYldn5OH6pVoUtWq+61aesjuriT8+xV008mzBgOvi1NXIEvug\nGr6iuL62ECQ2nYO6e2LuYl2YYboMpvY/kKNP9vtkOdNl3WAwGs5q65b2LdkjXSyD\nPm9XTMDDX7iFP4o5um3uI+clLvf3V5ljVvSTCakU+TPO+OQHO3NOdnVb286aPY3A\nmyAz9sCXZg8npx0oGl8NqaMEDyL0/kDOH1nIg02yyuaEupTCThxnOEbWhC91FQuZ\n5aroG7aHPVGepopF4YHCGp0wPIIPTpA5bI/gxmR1UQKBgQD2qoM5WLvjfsOH1rUv\n6owULeflwX4jWqqHrq68Sn1zat3J7M9v+ptQznNYEUl/2MNDh9ymVjPS4Jd2D0oN\nupGMsXGshdTDBtzZSG9Ivx67ykoLBdqX3UxGbXwI29CQCDcU+maVbnuvQUxbNBeA\nVZm3YQ0cNd4bXNMUvInyN5UPfwKBgQDh4G4ttwt9sA4WewcaSxY55nEXMTTgMVK6\nKxJmO0xw+eDP5PVtyfT8Etl9xSCXc8yxIHwonhaVvQ4fvub20S0Hua/OS3K8kJqs\nuBNFaqQCXFUx8L/A9bk2Y05jQMC9tLikohVFZ0NW9scCCaqMpjfgKH8mbNwLD6sW\nCjft71nnbQKBgEpgNbsn71d0VJ7z9aQiE+TNxru3cUJVx0+sM1HhIByaH5AQUKgS\nJ5zg81SduczL3mzRXY3mNjAiumjFyW2EUPjcVEtR+0pnGlaGCdAkmK7FGzhhpnze\nJG6j+p9tMGENqRYxPpdWPgMlLFHfzipLJVNu9xYHhBY6EgeRpgKcEd0fAoGAGoSM\nqtVIhhL7NGxxIwcZruZ89GoUeRWRTsXrvRDNIp5TZFTO83q4Rje4TOmtr9oqd8kG\nioY0xJOTauqwlt1r2fJUz3VQHQ8k+Y4KxSWF57kLT3eiK3ctrVLvSvu5JQxoePuG\nX8WFxFnodzbHTQfem3RlqQ8yriHCxi2g71AgT+kCgYBVRf3foUoYmamMSp92BEyp\nUxsYXd+hcfarovmM2Pse41B85kU5zKpV2gCpv/YfMW7sU87kS3vPruGlOqMZ/pTz\nygNMLlHihmKaZj2RGT7mp9ojeNgLMpk/MPXNsfmLYMdDPLjHmZtQe/sEtvhfBgJN\n3BxcUVgSVMIfe5GQDwOBKw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "cyber-go@cyberspace-409502.iam.gserviceaccount.com",
+  "client_id": "107982420948058027883",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cyber-go%40cyberspace-409502.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

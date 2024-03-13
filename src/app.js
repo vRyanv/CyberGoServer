@@ -1,14 +1,12 @@
+const path = require('path')
+
 //add library
 const express = require('express')
 const cookieParser = require('cookie-parser')
-var cors = require('cors')
+const cors = require('cors')
 require('colors');
 
-const routes = require('./api/routes/index.route')
-
-const path = require('path')
-require('dotenv').config({path: "src/.env"})
-
+const routes = require('./app/routes')
 
 const app = express()
 app.use(cors())
@@ -20,18 +18,20 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 app.use(cookieParser())
 
-if(process.env.PROJECT_MODE === 'dev'){
-//add library dev
 const morgan = require('morgan')
-// HTTP logger for dev
+// HTTP logger
 app.use(morgan('combined'))
-}
 
 // Rout init
 routes(app)
 const database = require('./config/connect-db')
 database.connect()
 
-const port = process.env.SERVER_PORT_DEV;
-const ip = process.env.SERVER_IP_DEV
-app.listen(port, ip, () => console.log(`Server started`.yellow + `\nListening request on ${ip}:${port} `.green))
+const {ServerEnv} = require('./env')
+const PORT = ServerEnv.SERVER_PORT_DEV;
+const IP = ServerEnv.SERVER_IP_DEV
+app.listen(
+    PORT,
+    IP,
+    () => console.log(`Server started`.yellow + `\nListening request on ${IP}:${PORT} `.green)
+)
