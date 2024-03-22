@@ -3,11 +3,8 @@ const {AcceptType, StatusCode} = require('../constant')
 const Auth = (req, res, next, roles)=>{
     const user_token = req.headers['authorization'];
     const user = JWT.Verify(user_token)
-    console.log(user_token)
-    console.log(user)
     if(user && roles.includes(user.role)){
       req.user = user
-
       return next()
     }
     if(req.get('Accept') === AcceptType.APP_JSON){

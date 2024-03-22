@@ -8,7 +8,7 @@ const FieldName = require('./FieldName')
 const StoragePath = require('./StoragePath')
 const MimeType = require('./MimeType')
 
-const DEFAULT_AVATAR = 'avatar_default.png'
+const DEFAULT_AVATAR = 'avatar_default.webp'
 module.exports = {
     MimeType,
     StoragePath,

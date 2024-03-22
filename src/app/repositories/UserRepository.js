@@ -3,8 +3,14 @@ const mongoose = require("mongoose");
 const User = mongoose.model("User", UserSchema);
 
 module.exports = {
+    UpdateUserInformation(user_id, user){
+        return User.findOneAndUpdate({_id:user_id}, user)
+    },
+    FindEmailExisted(user_id, email){
+        return User.findOne({ email, _id: {$ne: user_id}})
+    },
     FindById(user_id) {
-        return User.findOne({_id: user_id}).lean();
+        return User.findOne({_id: user_id}).populate('country').lean();
     },
     FindByEmailAndPassword(email, password) {
         return User.findOne({email, password}).lean();

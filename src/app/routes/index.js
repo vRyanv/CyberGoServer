@@ -11,7 +11,6 @@ module.exports = (app) => {
     app.use('/security', SecurityRouter)
     app.use(
         '/map',
-        (req, res, next) => Auth(req, res, next, [Role.USER, Role.DRIVER]),
         MapRouter
     )
     app.use(

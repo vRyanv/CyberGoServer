@@ -1,7 +1,7 @@
 module.exports = {
     FRONT_ID_CARD: 'front_id_card',
     BACK_ID_CARD: 'back_id_card',
-    DRIVER_AVATAR: 'driver_avatar',
+    AVATAR: 'avatar',
     ID_NUMBER: 'id_number',
     LICENSE_PLATES: 'license_plates',
     CURRICULUM_VITAE_IMG: 'curriculum_vitae',
