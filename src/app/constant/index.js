@@ -3,17 +3,21 @@ const StatusCode = require('./StatusCode')
 const Role = require('./Role')
 const AccountStatus = require('./AccountStatus')
 const ErrorType = require('./ErrorType')
-const AcceptType = require('./AcceptType')
+const ContentType = require('./ContentType')
 const FieldName = require('./FieldName')
 const StoragePath = require('./StoragePath')
 const MimeType = require('./MimeType')
+const VehicleStatus = require('./VehicleStatus')
+const VehicleType = require('./VehicleType')
 
 const DEFAULT_AVATAR = 'avatar_default.webp'
 module.exports = {
+    VehicleType,
+    VehicleStatus,
     MimeType,
     StoragePath,
     FieldName,
-    AcceptType,
+    ContentType,
     ErrorType,
     LanguageCode,
     StatusCode,

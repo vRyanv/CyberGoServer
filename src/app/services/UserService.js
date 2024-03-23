@@ -6,10 +6,49 @@ const {
     StoragePath
 } = require("../constant");
 
-const {UserRepository, CountryRepository} = require("../repositories");
+const {
+    UserRepository,
+    CountryRepository,
+    VehicleRepository
+} = require("../repositories");
+
 const {JWT, SecurityUtil, FileUtil} = require("../utils");
 
 const UserService = {
+    async DriverRegistration(user, vehicle_type, license_plates, files){
+        const vehicle_registration_certificate = {
+            front_vehicle_registration_certificate: files.front_vehicle_registration_certificate[0].filename,
+            back_vehicle_registration_certificate: files.front_vehicle_registration_certificate[0].filename
+        }
+        const driving_licenses = {
+            front_driving_licence: files.front_driving_license[0].filename,
+            back_driving_licence: files.front_driving_license[0].filename
+        }
+        const vehicle_img = {
+            front_vehicle: files.front_vehicle[0].filename,
+            back_vehicle: files.back_vehicle[0].filename,
+            right_vehicle: files.right_vehicle[0].filename,
+            left_vehicle: files.left_vehicle[0].filename
+        }
+
+        const vehicle = {
+            driver: user.id,
+            vehicle_type,
+            license_plates,
+            registration_date: new Date(),
+            ...vehicle_registration_certificate,
+            ...driving_licenses,
+            ...vehicle_img,
+        }
+
+        try {
+            await VehicleRepository.CreateDriverRegistration(vehicle);
+            return true
+        } catch (error){
+            console.error(error)
+            return false
+        }
+    },
     async UpdateIdCard(user_id, files){
         const user = {
             front_id_card: files.front_id_card && files.front_id_card[0].filename,

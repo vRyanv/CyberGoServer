@@ -8,16 +8,14 @@ const {FieldName, StoragePath} = require('../../../constant')
 route.post(
     '/',
     MulterUpload(StoragePath.DRIVER_PATH).fields([
-        {name: FieldName.FRONT_ID_CARD, maxCount: 1},
-        {name: FieldName.BACK_ID_CARD, maxCount: 1},
-        {name: FieldName.AVATAR, maxCount: 1},
-        {name: FieldName.CURRICULUM_VITAE_IMG, maxCount: 1},
+        {name: FieldName.FRONT_VEHICLE_REGISTRATION_CERTIFICATE, maxCount: 1},
+        {name: FieldName.BACK_VEHICLE_REGISTRATION_CERTIFICATE, maxCount: 1},
         {name: FieldName.FRONT_DRIVING_LICENSE, maxCount: 1},
         {name: FieldName.BACK_DRIVING_LICENSE, maxCount: 1},
-        {name: FieldName.FRONT_TRANSPORT, maxCount: 1},
-        {name: FieldName.BACK_TRANSPORT, maxCount: 1},
-        {name: FieldName.RIGHT_TRANSPORT, maxCount: 1},
-        {name: FieldName.LEFT_TRANSPORT, maxCount: 1},
+        {name: FieldName.FRONT_VEHICLE, maxCount: 1},
+        {name: FieldName.BACK_VEHICLE, maxCount: 1},
+        {name: FieldName.RIGHT_VEHICLE, maxCount: 1},
+        {name: FieldName.LEFT_VEHICLE, maxCount: 1},
     ]),
     UserController.DriverRegistrationAction)
 

@@ -4,11 +4,12 @@ module.exports = {
     AVATAR: 'avatar',
     ID_NUMBER: 'id_number',
     LICENSE_PLATES: 'license_plates',
-    CURRICULUM_VITAE_IMG: 'curriculum_vitae',
+    FRONT_VEHICLE_REGISTRATION_CERTIFICATE: 'front_vehicle_registration_certificate',
+    BACK_VEHICLE_REGISTRATION_CERTIFICATE: 'back_vehicle_registration_certificate',
     FRONT_DRIVING_LICENSE: 'front_driving_license',
     BACK_DRIVING_LICENSE: 'back_driving_license',
-    FRONT_TRANSPORT: 'front_transport',
-    BACK_TRANSPORT: 'back_transport',
-    RIGHT_TRANSPORT: 'right_transport',
-    LEFT_TRANSPORT: 'left_transport'
+    FRONT_VEHICLE: 'front_vehicle',
+    BACK_VEHICLE: 'back_vehicle',
+    RIGHT_VEHICLE: 'right_vehicle',
+    LEFT_VEHICLE: 'left_vehicle'
 }
