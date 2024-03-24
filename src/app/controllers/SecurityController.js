@@ -1,9 +1,18 @@
 const validator = require('validator')
 
 const {StatusCode, AccountStatus, ErrorType} = require('../constant')
-const {UserService, M, MailService} = require('../services')
+const {UserService, MailService} = require('../services')
 
 const SecurityController = {
+    async UpdateFirebaseToken(req, res){
+        const user_id = req.user.id
+        const {firebase_token} = req.body
+        const result_update = await UserService.UpdateFirebaseToken(user_id, firebase_token)
+        if(result_update){
+            return res.status(200).json({code: StatusCode.UPDATED, message: 'updated firebase token successfully'})
+        }
+        return res.status(200).json({code: StatusCode.BAD_REQUEST, message: 'updating firebase token failed'})
+    },
     async SignInAction(req, res) {
         let {email, password} = req.body
         const sign_in_result = await UserService.SignIn(email, password)
@@ -19,7 +28,7 @@ const SecurityController = {
                 message: 'Login is failed'
             })
         }
-        console.log(sign_in_result)
+
         return res.status(200).json({
             code: StatusCode.OK,
             message: 'Login is successfully',

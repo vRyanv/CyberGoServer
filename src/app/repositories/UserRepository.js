@@ -1,8 +1,9 @@
-const {UserSchema} = require("../schemas");
-const mongoose = require("mongoose");
-const User = mongoose.model("User", UserSchema);
+const {User} = require("../schemas");
 
 module.exports = {
+    UpdateFirebaseToken(user_id, firebase_token){
+        return User.updateOne({_id:user_id}, {firebase_token})
+    },
     UpdateUserInformation(user_id, user){
         return User.findOneAndUpdate({_id:user_id}, user)
     },

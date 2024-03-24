@@ -27,10 +27,39 @@ routes(app)
 const database = require('./config/connect-db')
 database.connect()
 
+const http = require("http");
+const server = http.createServer(app);
+const io = require("socket.io")(server);
+
+global.__user_socket = new Map()
+app.use((req, res, next)=> {
+    res.io = io
+    next()
+})
+
+const {JWT} = require("./app/utils");
+io.use((socket, next) => {
+    const token = socket.handshake.query.token
+    const user = JWT.Verify(token)
+    if (user) {
+        socket.sender = user
+        global.__user_sockets.set(user.id, socket)
+        next();
+    } else {
+        next(new Error("unauthorized"));
+    }
+})
+
+const {SocketService} = require('./app/services')
+io.on('connection', function (socket){
+    SocketService(socket)
+    console.log(global.__user_socket)
+})
+
 const {ServerEnv} = require('./env')
 const PORT = ServerEnv.SERVER_PORT_DEV;
 const IP = ServerEnv.SERVER_IP_DEV
-app.listen(
+server.listen(
     PORT,
     IP,
     () => console.log(`Server started`.yellow + `\nListening request on ${IP}:${PORT} `.green)

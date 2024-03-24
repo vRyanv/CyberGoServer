@@ -1,5 +1,5 @@
 const {MapService} = require('../services')
-module.exports =  {
+const MapController =  {
     async getAddressAction(req, res) {
         const lat = req.params.lat
         const lng = req.params.lng
@@ -13,3 +13,5 @@ module.exports =  {
         return res.status(200).json(result)
     }
 }
+
+module.exports = MapController

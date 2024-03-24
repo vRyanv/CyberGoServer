@@ -1,5 +1,6 @@
 module.exports = {
     ACCEPTED: 'ACCEPTED',
     REFUSED: 'REFUSED',
-    QUEUE: 'QUEUE'
+    QUEUE: 'QUEUE',
+    ALL: 'ALL'
 }

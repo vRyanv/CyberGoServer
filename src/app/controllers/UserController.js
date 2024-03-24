@@ -1,5 +1,5 @@
-const {StatusCode} = require('../../constant')
-const {UserService} = require('../../services')
+const {StatusCode} = require('../constant')
+const {UserService} = require('../services')
 
 const UserController = {
     async UpdateIdCardAction(req, res) {
@@ -32,6 +32,7 @@ const UserController = {
         return res.status(200).json({code: StatusCode.BAD_REQUEST, errors: 'BAD_REQUEST'})
     },
     async ProfileAction(req, res) {
+        console.log(req.user)
         let user = await UserService.Profile(req.user.id)
         if (user) {
             user = {

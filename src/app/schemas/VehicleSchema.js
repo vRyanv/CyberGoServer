@@ -23,4 +23,4 @@ const VehicleSchema = new Schema({
     status: {type: String, default: VehicleStatus.QUEUE},
 })
 
-module.exports = VehicleSchema;
+module.exports = mongoose.model("Vehicle", VehicleSchema);

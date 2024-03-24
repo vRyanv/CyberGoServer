@@ -9,20 +9,28 @@ const {
 const {
     UserRepository,
     CountryRepository,
-    VehicleRepository
+    DriverRegistrationRepository
 } = require("../repositories");
 
 const {JWT, SecurityUtil, FileUtil} = require("../utils");
 
 const UserService = {
+    async UpdateFirebaseToken(user_id, firebase_token){
+        try {
+            return await UserRepository.UpdateFirebaseToken(user_id, firebase_token)
+        } catch (error){
+            console.error(error)
+            return false
+        }
+    },
     async DriverRegistration(user, vehicle_type, license_plates, files){
         const vehicle_registration_certificate = {
             front_vehicle_registration_certificate: files.front_vehicle_registration_certificate[0].filename,
             back_vehicle_registration_certificate: files.front_vehicle_registration_certificate[0].filename
         }
         const driving_licenses = {
-            front_driving_licence: files.front_driving_license[0].filename,
-            back_driving_licence: files.front_driving_license[0].filename
+            front_driving_license: files.front_driving_license[0].filename,
+            back_driving_license: files.front_driving_license[0].filename
         }
         const vehicle_img = {
             front_vehicle: files.front_vehicle[0].filename,
@@ -42,7 +50,7 @@ const UserService = {
         }
 
         try {
-            await VehicleRepository.CreateDriverRegistration(vehicle);
+            await DriverRegistrationRepository.CreateDriverRegistration(vehicle);
             return true
         } catch (error){
             console.error(error)

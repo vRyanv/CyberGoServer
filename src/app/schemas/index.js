@@ -1,9 +1,9 @@
-const CountrySchema = require('./CountrySchema')
-const UserSchema = require('./UserSchema')
-const VehicleSchema = require('./VehicleSchema')
+const Country = require('./CountrySchema')
+const User = require('./UserSchema')
+const Vehicle = require('./VehicleSchema')
 
 module.exports = {
-    VehicleSchema,
-    CountrySchema,
-    UserSchema,
+    Country,
+    User,
+    Vehicle,
 }

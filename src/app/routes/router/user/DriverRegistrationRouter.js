@@ -19,4 +19,6 @@ route.post(
     ]),
     UserController.DriverRegistrationAction)
 
+route.get
+
 module.exports = route

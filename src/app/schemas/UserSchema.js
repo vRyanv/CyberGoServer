@@ -19,7 +19,8 @@ const UserSchema = new Schema({
     online_status: {type: Boolean, default: false},
     roles: {type: String, default: Role.USER},
     otp_code: {type: Number, maxLength: 6},
-    account_status: {type: String, default: AccountStatus.VERIFY}
+    account_status: {type: String, default: AccountStatus.VERIFY},
+    firebase_token: {type: String, required: false}
 }, {timestamps: true})
 
-module.exports = UserSchema
+module.exports = mongoose.model("User", UserSchema);

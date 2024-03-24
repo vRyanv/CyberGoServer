@@ -1,6 +1,4 @@
-const {CountrySchema} = require("../schemas");
-const mongoose = require("mongoose");
-const Country = mongoose.model("Country", CountrySchema);
+const {Country} = require("../schemas");
 
 class CountryRepository{
     async FindCountryByPrefix(prefix){

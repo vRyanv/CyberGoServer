@@ -1,11 +1,12 @@
 const {
     SecurityRouter,
     MapRouter,
-    UserRouter
+    UserRouter,
+    AdminRouter
 } = require('./router')
 
 const {Auth} = require('../middleware')
-const {Role} = require('../constant')
+const {Role, StatusCode} = require('../constant')
 
 module.exports = (app) => {
     app.use('/security', SecurityRouter)
@@ -19,9 +20,20 @@ module.exports = (app) => {
         UserRouter
     )
 
+    app.use(
+        '/admin',
+        (req, res, next) => Auth(req, res, next, [Role.USER, Role.DRIVER]),
+        AdminRouter
+    )
+
     app.post('/test', (req, res) => {
         console.log(req.header('Authorization'));
         console.log(req.headers);
         res.send({data: req.header})
+    })
+
+    app.use('/*', (req, res) => {
+        console.log('400')
+        res.status(400).json({code: StatusCode.NOT_FOUND, message: 'api not found'})
     })
 }
