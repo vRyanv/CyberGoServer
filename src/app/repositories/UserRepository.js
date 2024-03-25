@@ -14,10 +14,10 @@ module.exports = {
         return User.findOne({_id: user_id}).populate('country').lean();
     },
     FindByEmailAndPassword(email, password) {
-        return User.findOne({email, password}).lean();
+        return User.findOne({email, password}).populate('country').lean();
     },
     FindByEmail(email) {
-        return User.findOne({email}).lean()
+        return User.findOne({email}).populate('country').lean()
     },
     FindByPhoneNumber(phone_number) {
         return User.findOne({phone_number}).lean();

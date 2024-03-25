@@ -33,7 +33,6 @@ module.exports = (app) => {
     })
 
     app.use('/*', (req, res) => {
-        console.log('400')
         res.status(400).json({code: StatusCode.NOT_FOUND, message: 'api not found'})
     })
 }

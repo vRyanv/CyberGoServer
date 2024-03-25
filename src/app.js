@@ -31,7 +31,7 @@ const http = require("http");
 const server = http.createServer(app);
 const io = require("socket.io")(server);
 
-global.__user_socket = new Map()
+global.__user_sockets = new Map()
 app.use((req, res, next)=> {
     res.io = io
     next()
@@ -39,11 +39,12 @@ app.use((req, res, next)=> {
 
 const {JWT} = require("./app/utils");
 io.use((socket, next) => {
-    const token = socket.handshake.query.token
+    const token = socket.handshake.auth.token
     const user = JWT.Verify(token)
+
     if (user) {
-        socket.sender = user
-        global.__user_sockets.set(user.id, socket)
+        socket.user = user
+        __user_sockets.set(user.id, socket)
         next();
     } else {
         next(new Error("unauthorized"));
@@ -51,10 +52,8 @@ io.use((socket, next) => {
 })
 
 const {SocketService} = require('./app/services')
-io.on('connection', function (socket){
-    SocketService(socket)
-    console.log(global.__user_socket)
-})
+SocketService(io)
+
 
 const {ServerEnv} = require('./env')
 const PORT = ServerEnv.SERVER_PORT_DEV;

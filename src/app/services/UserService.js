@@ -121,11 +121,13 @@ const UserService = {
             id: user._id,
             role: user.role
         }
+        const phone_number = user.country.prefix + user.phone_number
         return {
             token: JWT.Create(token_object),
             user_id: user._id.toString(),
             avatar: user.avatar, 
-            full_name: user.full_name
+            full_name: user.full_name,
+            phone_number
         }
     },
     async SignUp(user){

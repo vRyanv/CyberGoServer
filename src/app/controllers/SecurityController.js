@@ -32,10 +32,7 @@ const SecurityController = {
         return res.status(200).json({
             code: StatusCode.OK,
             message: 'Login is successfully',
-            token: sign_in_result.token,
-            user_id: sign_in_result.user_id,
-            avatar: sign_in_result.avatar,
-            full_name: sign_in_result.full_name
+            ...sign_in_result
         })
     },
     async SignUpAction(req, res) {
