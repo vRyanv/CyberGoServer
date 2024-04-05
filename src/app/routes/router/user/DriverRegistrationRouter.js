@@ -17,8 +17,7 @@ route.post(
         {name: FieldName.RIGHT_VEHICLE, maxCount: 1},
         {name: FieldName.LEFT_VEHICLE, maxCount: 1},
     ]),
-    UserController.DriverRegistrationAction)
-
-route.get
+    UserController.DriverRegistrationAction
+)
 
 module.exports = route

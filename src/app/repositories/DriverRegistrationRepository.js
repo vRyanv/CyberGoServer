@@ -1,8 +1,11 @@
 const {Vehicle} = require("../schemas");
 
-
-
 module.exports = {
+    UpdateVehicleStatus(vehicle_id, status){
+        return Vehicle.findOneAndUpdate({_id:vehicle_id}, {status})
+            .populate('driver')
+            .lean()
+    },
     GetDriverRegistrationDetail(vehicle_id){
         return Vehicle.findById(vehicle_id)
             .populate({

@@ -32,10 +32,6 @@ const server = http.createServer(app);
 const io = require("socket.io")(server);
 
 global.__user_sockets = new Map()
-app.use((req, res, next)=> {
-    res.io = io
-    next()
-})
 
 const {JWT} = require("./app/utils");
 io.use((socket, next) => {

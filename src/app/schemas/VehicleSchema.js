@@ -21,6 +21,6 @@ const VehicleSchema = new Schema({
     right_vehicle: {type: String, required: true},
     left_vehicle: {type: String, required: true},
     status: {type: String, default: VehicleStatus.QUEUE},
-})
+}, {timestamps: true})
 
 module.exports = mongoose.model("Vehicle", VehicleSchema);

@@ -10,10 +10,12 @@ const {Role, StatusCode} = require('../constant')
 
 module.exports = (app) => {
     app.use('/security', SecurityRouter)
+
     app.use(
         '/map',
         MapRouter
     )
+
     app.use(
         '/user',
         (req, res, next) => Auth(req, res, next, [Role.USER, Role.DRIVER]),

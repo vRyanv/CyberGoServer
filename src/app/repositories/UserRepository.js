@@ -1,14 +1,17 @@
 const {User} = require("../schemas");
 
 module.exports = {
-    UpdateFirebaseToken(user_id, firebase_token){
-        return User.updateOne({_id:user_id}, {firebase_token})
+    UpdateOnlineStatus(user_id, online_status) {
+        return User.updateOne({_id: user_id}, {online_status})
     },
-    UpdateUserInformation(user_id, user){
-        return User.findOneAndUpdate({_id:user_id}, user)
+    UpdateFirebaseToken(user_id, firebase_token) {
+        return User.updateOne({_id: user_id}, {firebase_token})
     },
-    FindEmailExisted(user_id, email){
-        return User.findOne({ email, _id: {$ne: user_id}})
+    UpdateUserInformation(user_id, user) {
+        return User.findOneAndUpdate({_id: user_id}, user)
+    },
+    FindEmailExisted(user_id, email) {
+        return User.findOne({email, _id: {$ne: user_id}})
     },
     FindById(user_id) {
         return User.findOne({_id: user_id}).populate('country').lean();

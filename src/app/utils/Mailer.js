@@ -17,7 +17,7 @@ let transporter = nodemailer.createTransport({
 
 module.exports = async (from_mail, to_mail, subject, content) => {
 
-    await transporter.sendMail({
+    return await transporter.sendMail({
         from: from_mail,
         to: to_mail,
         subject: subject,
