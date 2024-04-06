@@ -23,14 +23,14 @@ const UserService = {
             return false
         }
     },
-    async DriverRegistration(user, vehicle_type, license_plates, files){
+    async DriverRegistration(user, vehicle_name, vehicle_type, license_plates, files){
         const vehicle_registration_certificate = {
             front_vehicle_registration_certificate: files.front_vehicle_registration_certificate[0].filename,
             back_vehicle_registration_certificate: files.front_vehicle_registration_certificate[0].filename
         }
         const driving_licenses = {
             front_driving_license: files.front_driving_license[0].filename,
-            back_driving_license: files.front_driving_license[0].filename
+            back_driving_license: files.back_driving_license[0].filename
         }
         const vehicle_img = {
             front_vehicle: files.front_vehicle[0].filename,
@@ -41,6 +41,7 @@ const UserService = {
 
         const vehicle = {
             driver: user.id,
+            vehicle_name,
             vehicle_type,
             license_plates,
             registration_date: new Date(),

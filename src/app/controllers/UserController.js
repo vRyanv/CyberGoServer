@@ -20,12 +20,14 @@ const UserController = {
         return res.status(200).json({code: StatusCode.BAD_REQUEST, message: 'Updating id card failed'})
     },
     async DriverRegistrationAction(req, res) {
-        const {vehicle_type, license_plates} = req.body
+        const {vehicle_name, vehicle_type, license_plates} = req.body
         const registration_result = await UserService.DriverRegistration(
-                                                req.user,
-                                                vehicle_type,
-                                                license_plates,
-                                                req.files)
+                                                        req.user,
+                                                        vehicle_name,
+                                                        vehicle_type,
+                                                        license_plates,
+                                                        req.files
+                                                    )
         if (registration_result) {
             return res.status(200).json({code: StatusCode.CREATED, message: 'Created driver registration successfully'})
         }
