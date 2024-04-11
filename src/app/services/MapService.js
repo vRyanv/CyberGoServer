@@ -114,6 +114,48 @@ const mapService = {
             return {code: StatusCode.BAD_REQUEST, errors}
         }
     },
+    CompareRouteByGeometry(){
+        function levenshteinDistance(s1, s2) {
+            const len_s1 = s1.length;
+            const len_s2 = s2.length;
+
+            // Tạo một ma trận để lưu trữ khoảng cách Levenshtein
+            const matrix = Array.from(Array(len_s1 + 1), () => Array(len_s2 + 1).fill(0));
+
+            // Khởi tạo ma trận với các giá trị ban đầu
+            for (let i = 0; i <= len_s1; i++) {
+                matrix[i][0] = i;
+            }
+            for (let j = 0; j <= len_s2; j++) {
+                matrix[0][j] = j;
+            }
+
+            // Điền vào ma trận với giá trị tối ưu
+            for (let i = 1; i <= len_s1; i++) {
+                for (let j = 1; j <= len_s2; j++) {
+                    const cost = s1[i - 1] === s2[j - 1] ? 0 : 1;
+                    matrix[i][j] = Math.min(
+                        matrix[i - 1][j] + 1,      // Xóa
+                        matrix[i][j - 1] + 1,      // Thêm
+                        matrix[i - 1][j - 1] + cost // Thay đổi hoặc giữ nguyên
+                    );
+                }
+            }
+
+            // Trả về khoảng cách Levenshtein cuối cùng
+            return matrix[len_s1][len_s2];
+        }
+
+// Chuỗi mẫu
+        const s1 = "mjebRoqgwhEbPw\vu@qeCtDoLrAwFuGaBis@kRyEoA_RsEsLwAaTUcLnBeS~Dkc@vIwDp@}sAbWuq@hMiKlBip@pLqo@jLa[zF__@lFqj@bHmBTuN|AcGd@oF^_P|@csFnVyLz@sLrAos@nKs@Jan@|Ioc@bGaEj@oi@`HahAcpAeFnGzRdUxh@xm@lAtAtFbH";
+        const s2 = "cqpbRsikwhE|_BsXjKiB_BgJiKlBip@pLqo@jLa[zF__@lFqj@bHmBTuN|AcGd@oF^_P|@csFnVyLz@sLrAos@nKs@Jan@|Ioc@bGaEj@oi@`HahAcpAsKuL{Xa[kKsLqH{IgJuJmJ{J";
+
+
+// Tính toán và in ra tỉ lệ trùng khớp giữa hai chuỗi
+        const distance = levenshteinDistance(s1, s2);
+        const similarity = 1 - (distance / Math.max(s1.length, s2.length));
+        console.log("Tỉ lệ trùng khớp giữa hai chuỗi:", similarity);
+    }
 }
 
 module.exports = mapService;

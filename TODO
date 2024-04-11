@@ -8,5 +8,10 @@
     4.1 list: @done
     4.2 detail: @done
     4.3 accept and refuse: ###
+5. vehicle list: @done
+6. vehicle detail: @done
+7. trip sharing:
+    7.1 multi route:
+    7.2 single route:
 
         thong bao toi user bang email, notifiby socket

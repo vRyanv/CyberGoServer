@@ -17,7 +17,7 @@ const UserSchema = new Schema({
     back_id_card: {type: String, default: ""},
     birthday: {type: Date, required: true},
     online_status: {type: Boolean, default: false},
-    roles: {type: String, default: Role.USER},
+    role: {type: String, default: Role.USER},
     otp_code: {type: Number, maxLength: 6},
     account_status: {type: String, default: AccountStatus.VERIFY},
     firebase_token: {type: String, required: false}

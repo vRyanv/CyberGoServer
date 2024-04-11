@@ -2,13 +2,20 @@ const {
     SecurityRouter,
     MapRouter,
     UserRouter,
-    AdminRouter
+    AdminRouter,
+    TripSharingRouter
 } = require('./router')
 
 const {Auth} = require('../middleware')
 const {Role, StatusCode} = require('../constant')
 
 module.exports = (app) => {
+    app.use(
+        '/trip-sharing',
+        (req, res, next) => Auth(req, res, next, [Role.USER, Role.DRIVER]),
+        TripSharingRouter
+    )
+
     app.use('/security', SecurityRouter)
 
     app.use(
@@ -24,7 +31,7 @@ module.exports = (app) => {
 
     app.use(
         '/admin',
-        (req, res, next) => Auth(req, res, next, [Role.USER, Role.DRIVER]),
+        (req, res, next) => Auth(req, res, next, [Role.ADMIN]),
         AdminRouter
     )
 
