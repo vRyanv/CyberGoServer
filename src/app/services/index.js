@@ -5,10 +5,10 @@ const DriverRegistrationService = require('./DriverRegistrationService')
 const SocketService = require('./SocketService')
 const FCMService = require('./FCMService')
 const VehicleService = require('./VehicleService')
-const TripSharingService = require('./TripSharingService')
+const TripService = require('./TripService')
 
 module.exports = {
-    TripSharingService,
+    TripService,
     VehicleService,
     SocketService,
     DriverRegistrationService,

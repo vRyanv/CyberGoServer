@@ -1,9 +1,9 @@
 const {Country} = require("../schemas");
 
-class CountryRepository{
+const CountryRepository = {
     async FindCountryByPrefix(prefix){
         return Country.findOne({prefix}).exec()
     }
 }
 
-module.exports = new CountryRepository
+module.exports = CountryRepository

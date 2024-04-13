@@ -1,10 +1,14 @@
 const Country = require('./CountrySchema')
 const User = require('./UserSchema')
 const Vehicle = require('./VehicleSchema')
-const NotificationSchema = require('./NotificationSchema')
+const Notification = require('./NotificationSchema')
+const Trip = require('./TripSchema')
+const Destination = require('./DestinationSchema')
 
 module.exports = {
-    NotificationSchema,
+    Notification,
+    Destination,
+    Trip,
     Country,
     User,
     Vehicle,

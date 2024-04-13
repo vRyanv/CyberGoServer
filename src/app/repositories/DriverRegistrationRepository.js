@@ -1,6 +1,6 @@
 const {Vehicle} = require("../schemas");
 
-module.exports = {
+const VehicleRepository = {
     UpdateVehicleStatus(vehicle_id, status){
         return Vehicle.findOneAndUpdate({_id:vehicle_id}, {status})
             .populate('driver')
@@ -35,3 +35,5 @@ module.exports = {
             .lean()
     }
 }
+
+module.exports = VehicleRepository

@@ -3,10 +3,10 @@ const SecurityController = require('./SecurityController')
 const UserController = require('./UserController')
 const DriverRegistrationController = require('./DriverRegistrationController')
 const VehicleController = require('./VehicleController')
-const TripSharingController = require('./TripSharingController')
+const TripController = require('./TripController')
 
 module.exports = {
-    TripSharingController,
+    TripController,
     DriverRegistrationController,
     VehicleController,
     MapController,

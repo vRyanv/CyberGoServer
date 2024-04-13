@@ -1,8 +1,8 @@
-const {NotificationSchema} = require("../schemas");
+const {Notification} = require("../schemas");
 
 const NotificationRepository = {
     CreateNotification(notification) {
-        return NotificationSchema.create(notification)
+        return Notification.create(notification)
     },
     GetNotificationOfUser() {
 

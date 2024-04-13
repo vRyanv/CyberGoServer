@@ -43,6 +43,7 @@ io.use((socket, next) => {
         __user_sockets.set(user.id, socket)
         next();
     } else {
+        console.log("unauthorized socket");
         next(new Error("unauthorized"));
     }
 })

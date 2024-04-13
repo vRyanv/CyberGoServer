@@ -1,6 +1,6 @@
 const {User} = require("../schemas");
 
-module.exports = {
+const UserRepository = {
     UpdateOnlineStatus(user_id, online_status) {
         return User.updateOne({_id: user_id}, {online_status})
     },
@@ -32,3 +32,5 @@ module.exports = {
         return User.findOneAndUpdate(update_conditions, update_data).lean()
     }
 }
+
+module.exports = UserRepository

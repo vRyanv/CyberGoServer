@@ -28,6 +28,7 @@ const mapService = {
             if (address_result.data.error !== undefined) {
                 return {code: StatusCode.NOT_FOUND, message: address_result.data.error}
             }
+
             return {
                 code: StatusCode.OK,
                 lat,
