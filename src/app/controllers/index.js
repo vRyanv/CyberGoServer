@@ -4,8 +4,10 @@ const UserController = require('./UserController')
 const DriverRegistrationController = require('./DriverRegistrationController')
 const VehicleController = require('./VehicleController')
 const TripController = require('./TripController')
+const MemberController = require('./MemberController')
 
 module.exports = {
+    MemberController,
     TripController,
     DriverRegistrationController,
     VehicleController,

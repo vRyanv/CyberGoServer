@@ -12,9 +12,11 @@ const VehicleType = require('./VehicleType')
 const SocketEvent = require('./SocketEvent')
 const NotificationType = require('./NotificationType')
 const SystemDefault = require('./SystemDefault')
+const MemberStatus = require('./MemberStatus')
 
 const DEFAULT_AVATAR = 'avatar_default.webp'
 module.exports = {
+    MemberStatus,
     SystemDefault,
     NotificationType,
     VehicleType,

@@ -12,7 +12,7 @@ const {Role, StatusCode} = require('../constant')
 module.exports = (app) => {
     app.use(
         '/trip',
-        (req, res, next) => Auth(req, res, next, [Role.USER, Role.DRIVER]),
+        (req, res, next) => Auth(req, res, next, [Role.USER, Role.ADMIN]),
         TripRouter
     )
 
@@ -25,7 +25,7 @@ module.exports = (app) => {
 
     app.use(
         '/user',
-        (req, res, next) => Auth(req, res, next, [Role.USER, Role.DRIVER]),
+        (req, res, next) => Auth(req, res, next, [Role.USER, Role.ADMIN]),
         UserRouter
     )
 

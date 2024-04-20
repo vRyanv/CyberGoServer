@@ -6,8 +6,10 @@ const SocketService = require('./SocketService')
 const FCMService = require('./FCMService')
 const VehicleService = require('./VehicleService')
 const TripService = require('./TripService')
+const MemberService = require('./MemberService')
 
 module.exports = {
+    MemberService,
     TripService,
     VehicleService,
     SocketService,

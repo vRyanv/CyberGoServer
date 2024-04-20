@@ -11,6 +11,7 @@ const UserSchema = new Schema({
     phone_number: {type: String, required: true},
     country: {type: Schema.ObjectId, ref: 'Country', required: true},
     avatar: {type: String, default: DEFAULT_AVATAR},
+    rating: {type:Number, default:0},
     address: {type: String, required: false},
     id_number: {type: String, default: ""},
     front_id_card: {type: String, default: ""},
