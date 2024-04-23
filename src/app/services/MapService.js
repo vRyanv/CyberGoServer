@@ -124,15 +124,6 @@ const MapService = {
     }
   },
   CompareRouteByGeometry(geometry_1, geometry_2) {
-    // Function to split a string into chunks
-    function splitStringIntoChunks(string, chunkSize) {
-      const chunks = [];
-      for (let i = 0; i < string.length; i += chunkSize) {
-        chunks.push(string.slice(i, i + chunkSize));
-      }
-      return chunks;
-    }
-
     // Function to calculate Levenshtein Distance between two strings
     function levenshteinDistance(str1, str2) {
       const m = str1.length;
@@ -160,22 +151,13 @@ const MapService = {
     }
 
     // Function to compare two geometries
-    function compareGeometries(geometry1, geometry2, chunkSize = 1000) {
-      const chunks1 = splitStringIntoChunks(geometry1, chunkSize);
-      const chunks2 = splitStringIntoChunks(geometry2, chunkSize);
-      let totalDistance = 0;
-      for (let i = 0; i < chunks1.length; i++) {
-        const chunk1 = chunks1[i] || '';
-        const chunk2 = chunks2[i] || '';
-        totalDistance += levenshteinDistance(chunk1, chunk2);
-      }
+    function compareGeometries(geometry1, geometry2) {
 
-      totalDistance
+     const distance = levenshteinDistance(geometry1, geometry2);
 
-      const totalLength = Math.max(geometry1.length, geometry2.length);
-      // Assuming a higher distance means less similarity, you can adjust this according to your needs
-      const similarity = 1 - totalDistance / totalLength;
-      return similarity;
+      const total_length = Math.max(geometry1.length, geometry2.length);
+      const similarity_percentage = (1 - distance / total_length) * 100;
+      return similarity_percentage;
     }
 
     return compareGeometries(geometry_1, geometry_2)

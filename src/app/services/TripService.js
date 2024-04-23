@@ -92,6 +92,7 @@ const tripService = {
       origin_county,
       origin_address,
       start_date,
+      route_match_percentage,
       geometry,
     } = body;
     origin_city = origin_city || "";
@@ -141,17 +142,18 @@ const tripService = {
       for (const des of trip.destinations) {
         destination_geomertry += des.geometry;
       }
-      const similarity_rate = MapService.CompareRouteByGeometry(
+      const similarity_percentage = MapService.CompareRouteByGeometry(
         geometry,
         destination_geomertry
       );
       console.log("trip", trip.name);
-      console.log("rate", similarity_rate);
-      if (similarity_rate > 0) {
+      console.log("rate", similarity_percentage);
+      if (similarity_percentage >= route_match_percentage) {
+        trip.route_match_percentage = similarity_percentage
         trip_match_route.push(trip);
       }
     });
-
+ 
     // init trip found list
     const trip_found_list = [];
     trip_match_route.map((trip) => {
@@ -181,6 +183,7 @@ const tripService = {
         start_date,
         start_time: trip.start_time,
         price: trip.price,
+        route_match_percentage: trip.route_match_percentage,
         member_list,
         origin_city: trip.origin_city,
         origin_state: trip.origin_state,
@@ -194,7 +197,7 @@ const tripService = {
       };
       trip_found_list.push(trip_found);
     });
-
+    console.log(trip_found_list)
     return trip_found_list;
   },
 };
