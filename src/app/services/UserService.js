@@ -79,17 +79,19 @@ const UserService = {
         }
 
     },
-    async UpdateProfile(user_id, avatar, full_name, gender, id_number, address){
+    async UpdateProfile(user_id, avatar, body){
         const user = {
-            full_name,
-            gender,
-            id_number,
-            address
+            user_id,
+            full_name: body.full_name,
+            birthday: body.birthday,
+            gender: body.gender,
+            id_number: body.id_number,
+            address: body.address
         }
         if(avatar){
             user.avatar = avatar.filename
         }
-
+        console.log(user);
         try{
             const user_found = await UserRepository.UpdateUserInformation(user_id, user)
             if(avatar && user_found.avatar !== DEFAULT_AVATAR){

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const {TripStatus} = require('../constant')
 
 const TripSchema = new Schema(
     {
@@ -31,9 +32,11 @@ const TripSchema = new Schema(
             ref: "Vehicle",
             required: true,
         },
-        start_date_time: {type: Date, required: true},
+        start_date: {type: Date, required: true},
+        start_time: {type: String, required: true },
         price: {type: Number, required: true},
         description: {type: String, required: false},
+        status: {type:String, default: TripStatus.OPENING}
     },
     {timestamps: true}
 );

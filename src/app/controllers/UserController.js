@@ -2,6 +2,25 @@ const {StatusCode} = require('../constant')
 const {UserService} = require('../services')
 
 const UserController = {
+    async ViewUserProfileAction(req, res){
+        let user = await UserService.Profile(req.params.user_id)
+        if (user) {
+            user = {
+                id: user._id.toString(),
+                full_name: user.full_name,
+                email: user.email,
+                rating: user.rating,
+                birthday: user.birthday,
+                phone_number: user.phone_number,
+                gender: user.gender,
+                avatar: user.avatar,
+                address: user.address,
+            }
+
+            return res.status(200).json({code: StatusCode.OK, ...user, message: 'Get profile sucecssfully'})
+        }
+        return res.status(200).json({code: StatusCode.NOT_FOUND, message: 'Not found profile'})
+    },
     async UpdateIdCardAction(req, res) {
         const user_id = req.user.id
         const files = req.files
@@ -34,7 +53,6 @@ const UserController = {
         return res.status(200).json({code: StatusCode.BAD_REQUEST, errors: 'BAD_REQUEST'})
     },
     async ProfileAction(req, res) {
-        console.log(req.user)
         let user = await UserService.Profile(req.user.id)
         if (user) {
             user = {
@@ -56,14 +74,7 @@ const UserController = {
         return res.status(200).json({code: StatusCode.NOT_FOUND, message: 'Not found profile'})
     },
     async UpdateProfileAction(req, res) {
-        const update_result = await UserService.UpdateProfile(
-            req.user.id,
-            req.file,
-            req.body.full_name,
-            req.body.gender,
-            req.body.id_number,
-            req.body.address
-        )
+        const update_result = await UserService.UpdateProfile(req.user.id, req.file, req.body)
         if (update_result) {
             if (update_result.avatar) {
                 return res.status(200).json({

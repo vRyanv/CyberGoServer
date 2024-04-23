@@ -1,5 +1,5 @@
 const TripStatus = {
-    OPENING: "opening",
+    OPENING: "Opening",
     CLOSED: "Closed",
     FINISH: "Finish"
 }

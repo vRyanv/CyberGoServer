@@ -13,9 +13,11 @@ const SocketEvent = require('./SocketEvent')
 const NotificationType = require('./NotificationType')
 const SystemDefault = require('./SystemDefault')
 const MemberStatus = require('./MemberStatus')
+const TripStatus = require('./TripStatus')
 
 const DEFAULT_AVATAR = 'avatar_default.webp'
 module.exports = {
+    TripStatus,
     MemberStatus,
     SystemDefault,
     NotificationType,

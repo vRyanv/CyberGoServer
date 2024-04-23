@@ -16,7 +16,7 @@ const UserSchema = new Schema({
     id_number: {type: String, default: ""},
     front_id_card: {type: String, default: ""},
     back_id_card: {type: String, default: ""},
-    birthday: {type: Date, required: true},
+    birthday: {type: String, required: true},
     online_status: {type: Boolean, default: false},
     role: {type: String, default: Role.USER},
     otp_code: {type: Number, maxLength: 6},
