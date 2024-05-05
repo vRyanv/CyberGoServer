@@ -15,7 +15,7 @@ const SystemDefault = require('./SystemDefault')
 const MemberStatus = require('./MemberStatus')
 const TripStatus = require('./TripStatus')
 
-const DEFAULT_AVATAR = 'avatar_default.webp'
+const DEFAULT_AVATAR = 'default_avatar.png'
 module.exports = {
     TripStatus,
     MemberStatus,

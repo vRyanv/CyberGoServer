@@ -45,7 +45,7 @@ const DriverRegistrationService = {
 
             //convert notification for mobile
             notification = {
-                id: notification._id.toString(),
+                _id: notification._id.toString(),
                 datetime: notification.createdAt.getTime().toString(),
                 avatar: notification.avatar,
                 title: notification.title,

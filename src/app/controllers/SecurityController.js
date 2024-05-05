@@ -16,7 +16,7 @@ const SecurityController = {
     async SignInAction(req, res) {
         let {email, password} = req.body
         const sign_in_result = await UserService.SignIn(email, password)
-
+        console.log(sign_in_result)
         if(sign_in_result === StatusCode.VERIFY){
             return res.status(200).json({
                 code: StatusCode.VERIFY,

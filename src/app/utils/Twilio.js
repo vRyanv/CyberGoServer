@@ -26,3 +26,5 @@ const Twilio = {
         }
     }
 }
+
+module.exports = Twilio;

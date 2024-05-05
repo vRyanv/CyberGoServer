@@ -4,8 +4,8 @@ const NotificationRepository = {
     CreateNotification(notification) {
         return Notification.create(notification)
     },
-    GetNotificationOfUser() {
-
+    GetNotificationOfUser(user_id) {
+        return Notification.find({user:user_id}).sort({createdAt: 'desc'}).lean()
     },
     GetNotificationOfAdmin() {
 

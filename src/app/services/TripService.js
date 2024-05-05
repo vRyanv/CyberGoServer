@@ -5,8 +5,78 @@ const {
 } = require("../repositories");
 const MapService = require("./MapService");
 const { Helper } = require("../utils");
-const fs = require("fs");
+
 const tripService = {
+  async GetTripList(user_id){
+    const trip_list = await TripRepository.GetTripList(user_id)
+    const shared_trip_list = []
+    const join_trip_list = []
+
+    trip_list.map(trip => {
+        if(trip.trip_owner._id.toString() == user_id){
+          shared_trip_list.push(CreateTripResonse(trip))
+        } else {
+          for(const member of trip.members){
+              if(member.user._id.toString() == user_id){
+                join_trip_list.push(CreateTripResonse(trip))
+                break
+              }
+          }
+        }
+    })
+
+    function CreateTripResonse(trip){
+      const members = []
+      trip.members.map(member =>{
+          members.push({
+            member_id: member._id.toString(),
+            user_id: member.user._id.toString(),
+            full_name: member.user.full_name,
+            avatar: member.user.avatar,
+            origin: member.origin,
+            destination: member.destination,
+            request_at: member.createdAt.getTime(),
+            status: member.status
+          })
+      })
+
+      const trip_response = {
+            trip_id: trip._id.toString(),
+            trip_owner: {
+              user_id: trip.trip_owner._id.toString(),
+              full_name: trip.trip_owner.full_name,
+              avatar: trip.trip_owner.avatar,
+            },
+            trip_name: trip.name,
+            destination_type: trip.destination_type,
+            vehicle: {
+              id: trip.vehicle._id.toString(),
+              type: trip.vehicle.vehicle_type,
+              license_plates: trip.vehicle.license_plates,
+              front_vehicle: trip.vehicle.front_vehicle,
+              back_vehicle: trip.vehicle.back_vehicle,
+              right_vehicle: trip.vehicle.right_vehicle,
+              left_vehicle: trip.vehicle.left_vehicle
+            },
+            start_date: Helper.DatePadStart(trip.start_date),
+            start_time: trip.start_time,
+            price: trip.price,
+            origin_longitude: trip.origin_longitude,
+            origin_latitude: trip.origin_latitude,
+            origin_city: trip.origin_city,
+            origin_state: trip.origin_state,
+            origin_county: trip.origin_county,
+            origin_address: trip.origin_address,
+            destinations: trip.destinations,
+            members,
+            trip_status: trip.status,
+            description: trip.description
+        }
+        return trip_response
+    }
+
+    return {shared_trip_list, join_trip_list}
+  },
   async Create(req) {
     let { destinations } = req.body.trip;
     destinations.map((des) => {
@@ -70,21 +140,10 @@ const tripService = {
       return false;
     }
   },
-  Update() {},
+  UpdateTripStatus(user_id, trip_id, status){
+      return TripRepository.UpdateStatus(user_id, trip_id, status)
+  },
   async PassengerFindTrip(body) {
-    console.log(body);
-
-    // const filePath = "data.json";
-    // const data = {geometry: body.geometry}
-    // // Ghi dữ liệu JSON vào tập tin
-    // fs.writeFile(filePath, JSON.stringify(data, null, 2), (err) => {
-    //   if (err) {
-    //     console.error("Lỗi khi ghi vào tập tin:", err);
-    //     return;
-    //   }
-    //   console.log("Dữ liệu đã được lưu vào tập tin JSON thành công.");
-    // });
-
     //get data
     let {
       origin_city,
@@ -146,8 +205,7 @@ const tripService = {
         geometry,
         destination_geomertry
       );
-      console.log("trip", trip.name);
-      console.log("rate", similarity_percentage);
+
       if (similarity_percentage >= route_match_percentage) {
         trip.route_match_percentage = similarity_percentage
         trip_match_route.push(trip);
@@ -179,7 +237,14 @@ const tripService = {
         trip_id: trip._id.toString(),
         owner,
         trip_name: trip.name,
-        vehicle_type: trip.vehicle.vehicle_type,
+        vehicle: {
+          id: trip.vehicle._id.toString(),
+          type: trip.vehicle.vehicle_type,
+          front_vehicle: trip.vehicle.front_vehicle,
+          back_vehicle: trip.vehicle.back_vehicle,
+          right_vehicle: trip.vehicle.right_vehicle,
+          left_vehicle: trip.vehicle.left_vehicle
+        },
         start_date,
         start_time: trip.start_time,
         price: trip.price,

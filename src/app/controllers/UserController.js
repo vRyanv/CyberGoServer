@@ -2,6 +2,12 @@ const {StatusCode} = require('../constant')
 const {UserService} = require('../services')
 
 const UserController = {
+    GetNotificationAction(req, res){
+        const user_id = req.user.id
+        UserService.GetNotification(user_id).then(notification_list => {
+            res.status(200).json({code:StatusCode.OK, notification_list})
+        })
+    },
     async ViewUserProfileAction(req, res){
         let user = await UserService.Profile(req.params.user_id)
         if (user) {
@@ -24,7 +30,8 @@ const UserController = {
     async UpdateIdCardAction(req, res) {
         const user_id = req.user.id
         const files = req.files
-        let update_result = await UserService.UpdateIdCard(user_id, files)
+        const id_number = req.body.id_number
+        let update_result = await UserService.UpdateIdCard(user_id, id_number, files)
         const id_card = {}
         if (req.files.front_id_card) {
             id_card.front_id_card = req.files.front_id_card[0].filename
@@ -39,6 +46,7 @@ const UserController = {
         return res.status(200).json({code: StatusCode.BAD_REQUEST, message: 'Updating id card failed'})
     },
     async DriverRegistrationAction(req, res) {
+        console.log(req.body)
         const {vehicle_name, vehicle_type, license_plates} = req.body
         const registration_result = await UserService.DriverRegistration(
                                                         req.user,
@@ -63,12 +71,13 @@ const UserController = {
                 country: user.country,
                 gender: user.gender,
                 avatar: user.avatar,
+                birthday: user.birthday,
                 address: user.address,
                 front_id_card: user.front_id_card,
                 back_id_card: user.back_id_card,
                 id_number: user.id_number
             }
-
+            console.log(user)
             return res.status(200).json({code: StatusCode.OK, ...user, message: 'Get profile sucecssfully'})
         }
         return res.status(200).json({code: StatusCode.NOT_FOUND, message: 'Not found profile'})

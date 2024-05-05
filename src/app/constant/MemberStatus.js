@@ -1,6 +1,6 @@
 const MemberStatus = {
-    QUEUE: "QUEUE",
-    ACCEPTED: "ACCEPTED",
+    QUEUE: "Queue",
+    JOINED: "Joined",
 }
 
 module.exports = MemberStatus

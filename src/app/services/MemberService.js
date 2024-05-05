@@ -16,8 +16,7 @@ const MemberService = {
             trip.members.map(member => {
                 member.createdAt = member.createdAt.getTime()
             })
-            trip.start_date = Helper.DatePadStart(trip.start_date_time);
-            trip.start_time = Helper.TimePadStart(trip.start_date_time);
+            trip.start_date = Helper.DatePadStart(trip.start_date);
             return trip;
         } catch(error){
             console.log(error);

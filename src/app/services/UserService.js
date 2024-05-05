@@ -9,12 +9,24 @@ const {
 const {
     UserRepository,
     CountryRepository,
-    DriverRegistrationRepository
+    DriverRegistrationRepository,
+    NotificationRepository
 } = require("../repositories");
 
 const {JWT, SecurityUtil, FileUtil} = require("../utils");
 
 const UserService = {
+    async GetNotification(user_id){
+        const notifications = await NotificationRepository.GetNotificationOfUser(user_id)
+        const notification_list = []
+        notifications.map(notify => {
+            notification_list.push({
+                ...notify,
+                datetime: notify.createdAt.getTime(),
+            })
+        })
+        return notification_list;
+    },
     async UpdateFirebaseToken(user_id, firebase_token){
         try {
             return await UserRepository.UpdateFirebaseToken(user_id, firebase_token)
@@ -58,8 +70,9 @@ const UserService = {
             return false
         }
     },
-    async UpdateIdCard(user_id, files){
+    async UpdateIdCard(user_id, id_number, files){
         const user = {
+            id_number,
             front_id_card: files.front_id_card && files.front_id_card[0].filename,
             back_id_card: files.back_id_card && files.back_id_card[0].filename
         }
@@ -128,7 +141,8 @@ const UserService = {
         return {
             token: JWT.Create(token_object),
             user_id: user._id.toString(),
-            avatar: user.avatar, 
+            avatar: user.avatar,
+            role: user.role,
             full_name: user.full_name,
             phone_number
         }

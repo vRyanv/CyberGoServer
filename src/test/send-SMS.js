@@ -1,10 +1,10 @@
-const os = require('os')
-const path = require('path');
-const FileUtil = require('../app/utils/FileUtil')
-const {StoragePath} = require('../app/constant')
-const from = 'C:\\Users\\RYAN\\AppData\\Local\\Temp\\1710931025941FB_IMG_1709050779055.jpg'
-const to = path.join('../../' + StoragePath.AVATAR_PATH, '1710931025941FB_IMG_1709050779055.jpg');
-FileUtil.MoveTo(from, to)
+// const os = require('os')
+// const path = require('path');
+// const FileUtil = require('../app/utils/FileUtil')
+// const {StoragePath} = require('../app/constant')
+// const from = 'C:\\Users\\RYAN\\AppData\\Local\\Temp\\1710931025941FB_IMG_1709050779055.jpg'
+// const to = path.join('../../' + StoragePath.AVATAR_PATH, '1710931025941FB_IMG_1709050779055.jpg');
+// FileUtil.MoveTo(from, to)
 // const http = require('http');
 // const https = require('https');
 // const ACCESS_TOKEN = "vKEIT0I7oIb5CpqaW9x5Gb5yVohv8PMi";
@@ -57,4 +57,11 @@ FileUtil.MoveTo(from, to)
 // }
 //
 // //send test sms
-// sendSMS(['+84374463592'], "test send SMS", 2, '');
+// sendSMS(['+84374463592'], 84778880524test send SMS", 2, '');
+
+const {Twilio} = require('../app/utils')
+Twilio.SendOTP('+84852983998').then(result =>{
+    console.log(result)
+}).catch(err =>{
+    console.log(err)
+})
