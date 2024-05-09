@@ -1,11 +1,31 @@
 const {Trip} = require("../schemas");
 const {MemberStatus, TripStatus} = require("../constant");
 const TripRepository = {
+    FindById(trip_id){
+       return Trip.findById(trip_id).lean()
+    },
+    UpdateInformation(user_id, trip_id, update_trip){
+        return Trip.updateOne({trip_owner: user_id, _id: trip_id},update_trip)
+    },
+    FindMemberByTripId(trip_id){
+        return Trip.findOne({_id:trip_id})
+            .populate('members')
+            .select('members').lean()
+    },
     UpdateStatus(user_id, trip_id, status){
-        return Trip.updateOne(
+        return Trip.findOneAndUpdate(
             {trip_owner:user_id,_id:trip_id},
             {status}
-            )
+            ).populate({
+            path: 'members',
+            populate: {
+                path: 'user',
+                select: 'firebase_token online_status'
+            }
+        }).populate({
+            path: 'trip_owner',
+            select: 'avatar'
+        }).lean()
     },
     GetTripList(){
         return Trip.find({})
@@ -22,8 +42,8 @@ const TripRepository = {
     Create(trip_sharing) {
         return Trip.create(trip_sharing)
     },
-    FindTripOpening(target_date){
-        return Trip.find({status:TripStatus.OPENING, start_date:target_date})
+    FindTripOpening(user_id, target_date){
+        return Trip.find({status:TripStatus.OPENING, start_date:target_date, trip_owner: {$ne:user_id} })
         .populate('destinations')
         .populate('trip_owner')
         .populate({

@@ -6,6 +6,8 @@ const {TripController} = require('../../../controllers');
 route.get('/list', TripController.TripList)
 route.post('/create', TripController.Create)
 route.post('/update-status', TripController.UpdateStatus)
+route.put('/update-information', TripController.UpdateInformation)
+route.put('/update-location', TripController.UpdateLocation)
 route.use('/member', MemberRouter)
 
 route.post('/passenger-find-trip', TripController.PassengerFindTrip)

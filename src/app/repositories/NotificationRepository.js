@@ -1,11 +1,12 @@
 const {Notification} = require("../schemas");
+const {NotificationType} = require('../constant')
 
 const NotificationRepository = {
     CreateNotification(notification) {
         return Notification.create(notification)
     },
     GetNotificationOfUser(user_id) {
-        return Notification.find({user:user_id}).sort({createdAt: 'desc'}).lean()
+        return Notification.find({user:user_id, type: NotificationType.USER}).sort({createdAt: 'desc'}).lean()
     },
     GetNotificationOfAdmin() {
 

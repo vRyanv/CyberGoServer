@@ -2,6 +2,22 @@ const {TripService} = require('../services')
 const {StatusCode} = require("../constant");
 
 const TripController = {
+    UpdateLocation(req, res){
+        TripService.UpdateTripLocation(req.user, req.body).then(result =>{
+            if(result){
+                return res.status(200).json({code: StatusCode.OK})
+            }
+            return res.status(200).json({code: StatusCode.BAD_REQUEST})
+        })
+    },
+    UpdateInformation(req, res){
+        TripService.UpdateInformation(req.user, req.body).then(result => {
+            if(result){
+                return res.status(200).json({code: StatusCode.OK})
+            }
+            return res.status(200).json({code: StatusCode.BAD_REQUEST})
+        })
+    },
     async TripList(req, res) {
         const user_id = req.user.id
         const {shared_trip_list, join_trip_list} = await TripService.GetTripList(user_id);
@@ -18,21 +34,18 @@ const TripController = {
     },
     UpdateStatus(req, res) {
         console.log("UpdateStatus body: ", req.body)
-        const user_id = req.user.id
+        const user = req.user
         const {trip_id,status} = req.body
-        TripService.UpdateTripStatus(user_id, trip_id, status)
-            .then(result => {
-                if (result) {
-                    return res.status(200).json({code: StatusCode.OK, status})
-                }
-                return res.status(200).json({code: StatusCode.BAD_REQUEST})
-            }).catch(error => {
+        try {
+            TripService.UpdateTripStatus(user, trip_id, status)
+            return res.status(200).json({code: StatusCode.OK, status})
+        } catch (error){
             console.log("TripService.UpdateTripStatus: ", error)
             return res.status(200).json({code: StatusCode.BAD_REQUEST})
-        })
+        }
     },
     async PassengerFindTrip(req, res) {
-        const trip_found_list = await TripService.PassengerFindTrip(req.body)
+        const trip_found_list = await TripService.PassengerFindTrip(req.user, req.body)
         return res.status(200).json({code: StatusCode.OK, trip_found_list})
     }
 }
