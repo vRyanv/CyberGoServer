@@ -1,6 +1,15 @@
 const {Trip} = require("../schemas");
 const {MemberStatus, TripStatus} = require("../constant");
 const TripRepository = {
+    FindTripOwnerByTripId(trip_id){
+        return Trip.findById(trip_id).populate('trip_owner').lean()
+    },
+    RemoveMemberRequest(trip_id, member_id){
+        return Trip.updateOne(
+            {_id:trip_id},
+            {$pull: {members: member_id}}
+        )
+    },
     FindById(trip_id){
        return Trip.findById(trip_id).lean()
     },
@@ -48,8 +57,7 @@ const TripRepository = {
         .populate('trip_owner')
         .populate({
             path: 'members',
-            populate: 'user',
-            match: {status:MemberStatus.ACCEPTED}
+            populate: 'user'
         })
         .populate('vehicle').sort({createdAt: 'desc'}).lean()
     },

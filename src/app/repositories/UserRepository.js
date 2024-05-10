@@ -1,6 +1,10 @@
 const {User} = require("../schemas");
 
 const UserRepository = {
+    GetFirsebaseTokenByUserId(user_id){
+        return User.findOne({_id:user_id})
+        .select('firebase_token').lean()
+    },
     UpdateOnlineStatus(user_id, online_status) {
         return User.updateOne({_id: user_id}, {online_status})
     },

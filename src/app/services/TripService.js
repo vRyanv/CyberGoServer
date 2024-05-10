@@ -93,18 +93,18 @@ const tripService = {
 
         trip_list.map(trip => {
             if (trip.trip_owner._id.toString() == user_id) {
-                shared_trip_list.push(CreateTripResonse(trip))
+                shared_trip_list.push(CreateTripResponse(trip))
             } else {
                 for (const member of trip.members) {
                     if (member.user._id.toString() == user_id) {
-                        join_trip_list.push(CreateTripResonse(trip))
+                        join_trip_list.push(CreateTripResponse(trip))
                         break
                     }
                 }
             }
         })
 
-        function CreateTripResonse(trip) {
+        function CreateTripResponse(trip) {
             const members = []
             trip.members.map(member => {
                 members.push({
@@ -265,6 +265,7 @@ const tripService = {
 
         const trip = await TripRepository.UpdateStatus(user.id, trip_id, status)
         if (trip) {
+            console.log(trip.members);
             PushNotification(trip)
             return true
         } else {
@@ -354,6 +355,7 @@ const tripService = {
                     rating: member.user.rating,
                 });
             });
+            console.log(member_list);
 
             const owner = {
                 user_id: trip.trip_owner._id.toString(),
