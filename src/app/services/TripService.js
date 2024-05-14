@@ -9,6 +9,61 @@ const {SocketEvent, TripStatus, SystemDefault, NotificationType} = require("../c
 const FCMService = require("./FCMService");
 
 const tripService = {
+    async DeleteTrip(user, params){
+        const {trip_id} = params
+        const trip = await TripRepository.FindAndDeleteTrip(user.id, trip_id)
+        
+        const DeleteAndNotifyToMember = async (owner_avatar, trip_name, members) => {
+            members.map(async member => {
+                let notification = {
+                    title: "Trip has been deleted",
+                    user: member.user._id.toString(),
+                    avatar: owner_avatar,
+                    content: trip_name,
+                    type: NotificationType.USER,
+                  }
+        
+                  const create_notify_task = NotificationRepository.CreateNotification(notification)
+                  const delete_member_task = MemberRepository.RemoveMemberRequest(member._id.toString())
+                  const result = await Promise.all([create_notify_task, delete_member_task])
+                  notification = result[0]
+                  notification = {
+                    _id: notification._id.toString(),
+                    datetime: notification.createdAt.getTime().toString(),
+                    avatar: notification.avatar,
+                    title: notification.title,
+                    content: notification.content,
+                  };
+                  const { firebase_token, _id} = member.user
+                  FCMService.SendSingleNotification({ ...notification }, firebase_token);
+                  const member_socket = __user_sockets.get(_id.toString());
+                  if (member_socket) {
+                    console.log("member_socket", member_socket)
+                    member_socket.emit(SocketEvent.DELETE_TRIP);
+                  }
+            })
+        }
+
+        const DeleteDestination = async (destinations) => {
+            const des_ids = []
+            destinations.map( des => {
+                des_ids.push(des._id)
+            })
+            return DestinationRepository.DeleteMany(des_ids)
+        }
+
+        console.log(trip)
+        const delete_and_notify_task = DeleteAndNotifyToMember(trip.trip_owner.avatar, trip.name, trip.members)
+        const delete_destination = DeleteDestination(trip.destinations)
+
+        try{
+            await Promise.all([delete_and_notify_task, delete_destination])
+            return true
+        } catch (error){
+            console.log(error)
+            return false
+        }
+    },
     async UpdateTripLocation(user, body){
         console.log(body);
         const {
@@ -112,8 +167,10 @@ const tripService = {
                     user_id: member.user._id.toString(),
                     full_name: member.user.full_name,
                     avatar: member.user.avatar,
+                    rating: member.user.rating,
                     origin: member.origin,
                     destination: member.destination,
+                    geometry: member.geometry,
                     request_at: member.createdAt.getTime(),
                     status: member.status
                 })

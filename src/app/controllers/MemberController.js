@@ -1,6 +1,15 @@
 const {StatusCode, MemberStatus} = require('../constant')
 const {MemberService} = require('../services')
 const MemberController = {
+    MemberLeaveTripAction(req, res){
+        MemberService.MemberLeaveTrip(req.user, req.body)
+        .then(result => {
+            if(result){
+                return res.status(200).json({code: StatusCode.UPDATED})
+            }
+            return res.status(200).json({code: StatusCode.BAD_REQUEST, message: "BAD_REQUEST"})
+        })
+    },
     UpdateMemeberStatusAction(req, res){
         if(req.body.status == MemberStatus.JOINED){
             MemberService.AcceptMemberRequest(req.body)

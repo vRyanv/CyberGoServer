@@ -12,7 +12,7 @@ const UserController = {
         let user = await UserService.Profile(req.params.user_id)
         if (user) {
             user = {
-                id: user._id.toString(),
+                user_id: user._id.toString(),
                 full_name: user.full_name,
                 email: user.email,
                 rating: user.rating,
@@ -64,7 +64,7 @@ const UserController = {
         let user = await UserService.Profile(req.user.id)
         if (user) {
             user = {
-                id: user._id.toString(),
+                user_id: user._id.toString(),
                 full_name: user.full_name,
                 email: user.email,
                 phone_number: user.phone_number,

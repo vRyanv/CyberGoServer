@@ -2,6 +2,9 @@ const { MemberStatus } = require('../constant')
 const {Trip, Member} = require('../schemas')
 
 const MemberRepository = {
+    RemoveById(member_id){
+        return Member.deleteOne({_id: member_id})
+    },
     RemoveMemberRequest(member_id){
         return Member.findByIdAndDelete(member_id).populate('user').lean()
     },

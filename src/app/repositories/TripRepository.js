@@ -1,6 +1,15 @@
 const {Trip} = require("../schemas");
 const {MemberStatus, TripStatus} = require("../constant");
 const TripRepository = {
+    FindAndDeleteTrip(user_id, trip_id){
+        return Trip.findOneAndDelete({trip_owner: user_id, _id:trip_id})
+        .populate('trip_owner')
+        .populate({
+            path: 'members',
+            populate: 'user'
+        })
+        .lean()
+    },
     FindTripOwnerByTripId(trip_id){
         return Trip.findById(trip_id).populate('trip_owner').lean()
     },

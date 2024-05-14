@@ -6,8 +6,10 @@ const NotificationRepository = require('./NotificationRepository')
 const TripRepository = require('./TripRepository')
 const DestinationRepository = require('./DestinationRepository')
 const MemberRepository = require('./MemberRepository')
+const RatingRepository = require('./RatingRepository')
 
 module.exports = {
+    RatingRepository,
     MemberRepository,
     DestinationRepository,
     TripRepository,

@@ -2,6 +2,15 @@ const {TripService} = require('../services')
 const {StatusCode} = require("../constant");
 
 const TripController = {
+    Delete(req, res){
+        TripService.DeleteTrip(req.user, req.params)
+        .then(result =>{
+            if(result){
+                return res.status(200).json({code: StatusCode.DELETED})
+            }
+            return res.status(200).json({code: StatusCode.BAD_REQUEST})
+        })
+    },
     UpdateLocation(req, res){
         TripService.UpdateTripLocation(req.user, req.body).then(result =>{
             if(result){
