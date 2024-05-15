@@ -4,13 +4,19 @@ const {
   UserRouter,
   AdminRouter,
   TripRouter,
-  RatingRouter
+  RatingRouter,
+  ChatRouter
 } = require("./router");
 
 const { Auth } = require("../middleware");
 const { Role, StatusCode } = require("../constant");
 
 module.exports = (app) => {
+  app.use(
+    '/chat',
+    (req, res, next) => Auth(req, res, next, [Role.USER, Role.ADMIN]),
+    ChatRouter
+  )
   app.use(
     "/rating",
     (req, res, next) => Auth(req, res, next, [Role.USER, Role.ADMIN]),

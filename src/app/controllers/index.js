@@ -6,8 +6,10 @@ const VehicleController = require('./VehicleController')
 const TripController = require('./TripController')
 const MemberController = require('./MemberController')
 const RatingController = require('./RatingController')
+const ChatController = require('./ChatController')
 
 module.exports = {
+    ChatController,
     RatingController,
     MemberController,
     TripController,

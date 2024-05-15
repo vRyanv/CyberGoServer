@@ -8,8 +8,10 @@ const VehicleService = require('./VehicleService')
 const TripService = require('./TripService')
 const MemberService = require('./MemberService')
 const RatingService = require('./RatingService')
+const ChatService = require('./ChatService')
 
 module.exports = {
+    ChatService,
     RatingService,
     MemberService,
     TripService,

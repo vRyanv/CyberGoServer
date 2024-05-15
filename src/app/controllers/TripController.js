@@ -30,8 +30,6 @@ const TripController = {
     async TripList(req, res) {
         const user_id = req.user.id
         const {shared_trip_list, join_trip_list} = await TripService.GetTripList(user_id);
-        console.log("shared_trip_managent", shared_trip_list)
-        console.log("join_trip_managent", join_trip_list)
         res.status(200).json({code: StatusCode.OK, shared_trip_list, join_trip_list})
     },
     async Create(req, res) {

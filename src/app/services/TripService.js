@@ -157,11 +157,11 @@ const tripService = {
                     }
                 }
             }
-        })
+        }) 
 
         function CreateTripResponse(trip) {
-            const members = []
-            trip.members.map(member => {
+            const members = [] 
+            trip.members.map(member => { 
                 members.push({
                     member_id: member._id.toString(),
                     user_id: member.user._id.toString(),

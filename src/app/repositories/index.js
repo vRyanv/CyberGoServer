@@ -7,8 +7,10 @@ const TripRepository = require('./TripRepository')
 const DestinationRepository = require('./DestinationRepository')
 const MemberRepository = require('./MemberRepository')
 const RatingRepository = require('./RatingRepository')
+const ChatRepository = require('./ChatRepository')
 
 module.exports = {
+    ChatRepository,
     RatingRepository,
     MemberRepository,
     DestinationRepository,
