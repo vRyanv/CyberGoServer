@@ -2,6 +2,14 @@ const {StatusCode} = require('../constant')
 const {UserService} = require('../services')
 
 const UserController = {
+    GetStatisticAction(req, res){
+        UserService.GetStatistic(req.user, req.params)
+        .then(result => {
+            console.log(result)
+            const {trip_quantity_of_vehicle, revenue_of_vehicle} = result
+            res.status(200).json({code:StatusCode.OK, trip_quantity_of_vehicle, revenue_of_vehicle})
+        })
+    },
     GetNotificationAction(req, res){
         const user_id = req.user.id
         UserService.GetNotification(user_id).then(notification_list => {

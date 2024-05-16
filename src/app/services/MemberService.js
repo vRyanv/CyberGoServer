@@ -9,46 +9,56 @@ const { MemberStatus, NotificationType, SocketEvent } = require("../constant");
 const FCMService = require("./FCMService");
 
 const MemberService = {
-  async MemberLeaveTrip(user, body){
-      const {trip_id, member_id, member_full_name, member_avatar} = body
-      const get_trip_task = TripRepository.FindTripOwnerByTripId(trip_id)
-      const remove_member_task = MemberRepository.RemoveById(member_id)
-      const remove_member_in_trip_task = TripRepository.RemoveMemberRequest(trip_id,member_id)
+  async MemberLeaveTrip(user, body) {
+    const { trip_id, member_id, member_full_name, member_avatar } = body;
+    const get_trip_task = TripRepository.FindTripOwnerByTripId(trip_id);
+    const remove_member_task = MemberRepository.RemoveById(member_id);
+    const remove_member_in_trip_task = TripRepository.RemoveMemberRequest(
+      trip_id,
+      member_id
+    );
 
+    try {
+      const result = await Promise.all([
+        get_trip_task,
+        remove_member_task,
+        remove_member_in_trip_task,
+      ]);
+      const trip = result[0];
+      const content = `${member_full_name} has left the trip (${trip.name}) `;
+      let notification = {
+        title: "The member has left the trip",
+        user: trip.trip_owner._id.toString(),
+        avatar: member_avatar,
+        content,
+        type: NotificationType.USER,
+      };
 
-
-      try{
-          const result = await Promise.all([get_trip_task, remove_member_task, remove_member_in_trip_task])
-          const trip = result[0]
-          const content =  `${member_full_name} has left the trip (${trip.name}) `
-          let notification = {
-            title: "The member has left the trip",
-            user: trip.trip_owner._id.toString(),
-            avatar: member_avatar,
-            content,
-            type: NotificationType.USER,
-          }
-
-          notification = await NotificationRepository.CreateNotification(notification)
-          notification = {
-            _id: notification._id.toString(),
-            datetime: notification.createdAt.getTime().toString(),
-            avatar: notification.avatar,
-            title: notification.title,
-            content: notification.content,
-          };
-          const { firebase_token } = trip.trip_owner
-          FCMService.SendSingleNotification({ ...notification }, firebase_token);
-          const member_socket = __user_sockets.get(trip.trip_owner._id.toString());
-          if (member_socket) {
-            member_socket.emit(SocketEvent.PASSENGER_LEAVE);
-          }
-    
-          return true
-      } catch(error){
-        console.log(error);
-        return false
+      notification = await NotificationRepository.CreateNotification(
+        notification
+      );
+      notification = {
+        _id: notification._id.toString(),
+        datetime: notification.createdAt.getTime().toString(),
+        avatar: notification.avatar,
+        title: notification.title,
+        content: notification.content,
+      };
+      const { firebase_token } = trip.trip_owner;
+      if (firebase_token != "") {
+        FCMService.SendSingleNotification({ ...notification }, firebase_token);
       }
+
+      const member_socket = __user_sockets.get(trip.trip_owner._id.toString());
+      if (member_socket) {
+        member_socket.emit(SocketEvent.PASSENGER_LEAVE);
+      }
+
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   },
   async AcceptMemberRequest(body) {
     console.log(body);
@@ -84,7 +94,9 @@ const MemberService = {
       };
 
       const { firebase_token } = result_task[1];
-      FCMService.SendSingleNotification({ ...notification }, firebase_token);
+      if (firebase_token != "") {
+        FCMService.SendSingleNotification({ ...notification }, firebase_token);
+      }
       const member_socket = __user_sockets.get(member.user_id.toString());
       if (member_socket) {
         member_socket.emit(SocketEvent.PASSENGER_REQUEST);
@@ -134,9 +146,13 @@ const MemberService = {
       };
       const member_user = result[1];
       const { firebase_token } = member_user.user;
-      FCMService.SendSingleNotification({ ...notification }, firebase_token);
+      if (firebase_token != "") {
+        FCMService.SendSingleNotification({ ...notification }, firebase_token);
+      }
       if (member_user.user.online_status) {
-        const member_socket = __user_sockets.get(member_user.user._id.toString());
+        const member_socket = __user_sockets.get(
+          member_user.user._id.toString()
+        );
         if (member_socket) {
           member_socket.emit(SocketEvent.PASSENGER_REQUEST);
         }
@@ -149,7 +165,7 @@ const MemberService = {
   },
   async MemberRequestToJoinTrip(user_id, body) {
     const trip_id = body.trip_id;
-    const {origin, destination, geometry} = body
+    const { origin, destination, geometry } = body;
     const member = {
       user: user_id,
       origin,
@@ -185,10 +201,12 @@ const MemberService = {
             content: new_notification.content,
           };
 
-          FCMService.SendSingleNotification(
-            { ...notification },
-            firebase_token
-          );
+          if (firebase_token != "") {
+            FCMService.SendSingleNotification(
+              { ...notification },
+              firebase_token
+            );
+          }
         }
       );
 

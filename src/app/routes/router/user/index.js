@@ -11,5 +11,5 @@ route.use('/profile', ProfileRouter)
 route.use('/vehicle', VehicleRouter)
 route.get('/view-user-profile/:user_id', UserController.ViewUserProfileAction)
 route.get('/notification', UserController.GetNotificationAction)
-
+route.get('/statistic/:start_date/:end_date', UserController.GetStatisticAction)
 module.exports = route

@@ -33,7 +33,7 @@ const UserRepository = {
         return User.create(user);
     },
     UpdateActiveAccount(update_conditions, update_data) {
-        return User.findOneAndUpdate(update_conditions, update_data).lean()
+        return User.findOneAndUpdate(update_conditions, update_data).populate('country').lean()
     }
 }
 

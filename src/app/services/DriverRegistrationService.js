@@ -56,9 +56,15 @@ const DriverRegistrationService = {
                 if (socket) {
                     socket.emit(SocketEvent.NOTIFICATION, JSON.stringify(notification))
                 } else {
+                    if(firebase_token == ""){
+                        return
+                    }
                     FCMService.SendSingleNotification({...notification}, firebase_token)
                 }
             } else {
+                if(firebase_token == ""){
+                    return
+                }
                 FCMService.SendSingleNotification({...notification}, firebase_token)
             }
             return true

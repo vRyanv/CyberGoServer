@@ -35,7 +35,9 @@ const tripService = {
                     content: notification.content,
                   };
                   const { firebase_token, _id} = member.user
-                  FCMService.SendSingleNotification({ ...notification }, firebase_token);
+                  if (firebase_token != "") {
+                    FCMService.SendSingleNotification({ ...notification }, firebase_token);
+                  }
                   const member_socket = __user_sockets.get(_id.toString());
                   if (member_socket) {
                     console.log("member_socket", member_socket)
@@ -298,7 +300,11 @@ const tripService = {
                         title: notification.title,
                         content: notification.content,
                     }
-                    FCMService.SendSingleNotification({...notification}, member.user.firebase_token)
+
+                    if (firebase_token != "") {
+                        FCMService.SendSingleNotification({...notification}, member.user.firebase_token)
+                      }
+            
 
                     PushSocket(member.user, trip_id)
                 })
