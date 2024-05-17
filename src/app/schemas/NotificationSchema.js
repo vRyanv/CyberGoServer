@@ -6,9 +6,14 @@ const NotificationSchema = new Schema({
         ref: 'User',
         required: true
     },
-    title: {type:String, required:true},
-    avatar: {type:String, required:true},
-    content: {type:String, required:true},
-    type: {type:String, required: true}
-}, {timestamps:true})
+    title: {type: String, required: true},
+    avatar: {type: String, required: true},
+    content: {type: String, required: true},
+    type: {type: String, required: true},
+    vehicle: {
+        type: Schema.ObjectId,
+        ref: 'Vehicle',
+        required: false
+    },
+}, {timestamps: true})
 module.exports = mongoose.model("Notification", NotificationSchema);

@@ -9,8 +9,12 @@ const TripService = require('./TripService')
 const MemberService = require('./MemberService')
 const RatingService = require('./RatingService')
 const ChatService = require('./ChatService')
+const UserManagementService = require('./admin/UserManagementService')
+const NotificationService = require('./NotificationService')
 
 module.exports = {
+    NotificationService,
+    UserManagementService,
     ChatService,
     RatingService,
     MemberService,

@@ -7,8 +7,12 @@ const TripController = require('./TripController')
 const MemberController = require('./MemberController')
 const RatingController = require('./RatingController')
 const ChatController = require('./ChatController')
+const UserManagementController = require('./admin/UserManagementController')
+const NotificationController = require('./NotificationController')
 
 module.exports = {
+    NotificationController,
+    UserManagementController,
     ChatController,
     RatingController,
     MemberController,

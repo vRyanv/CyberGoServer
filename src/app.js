@@ -29,7 +29,12 @@ database.connect()
 
 const http = require("http");
 const server = http.createServer(app);
-const io = require("socket.io")(server);
+const io = require("socket.io")(server,{
+    cors:{
+        origin: '*',
+        methods: '*'
+    }
+});
 
 global.__user_sockets = new Map()
 
@@ -37,7 +42,6 @@ const {JWT} = require("./app/utils");
 io.use((socket, next) => {
     const token = socket.handshake.auth.token
     const user = JWT.Verify(token)
-
     if (user) {
         socket.user = user
         __user_sockets.set(user.id, socket)

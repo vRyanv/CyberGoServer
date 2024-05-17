@@ -1,6 +1,17 @@
 const {User} = require("../schemas");
+const {Role} = require("../constant");
 
 const UserRepository = {
+    FindUserDetail(user_id){
+        return User.findById(user_id)
+            .populate('country')
+            .select('-password -firebase_token').lean()
+    },
+    GetAllUser(status){
+        return User.find(status == 'ALL' ? {role:Role.USER}:{account_status: status, role:Role.USER})
+            .populate('country')
+            .select('-password -firebase_token').lean()
+    },
     GetFirsebaseTokenByUserId(user_id){
         return User.findOne({_id:user_id})
         .select('firebase_token').lean()
