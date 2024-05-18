@@ -11,8 +11,10 @@ const RatingService = require('./RatingService')
 const ChatService = require('./ChatService')
 const UserManagementService = require('./admin/UserManagementService')
 const NotificationService = require('./NotificationService')
+const DashboardService = require('./admin/DashboardService')
 
 module.exports = {
+    DashboardService,
     NotificationService,
     UserManagementService,
     ChatService,

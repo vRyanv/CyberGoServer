@@ -167,8 +167,6 @@ const UserService = {
                 vehicle_id: notification.vehicle
             }
 
-            console.log(notification)
-
             function FindAdminSocket() {
                 for (let [key, value] of __user_sockets.entries()) {
                     if (value.user.role === Role.ADMIN) {
@@ -179,7 +177,7 @@ const UserService = {
             }
 
             const admin_socket = FindAdminSocket();
-            console.log(admin_socket)
+            // console.log(admin_socket)
             if (admin_socket) {
                 admin_socket.emit(SocketEvent.NOTIFICATION, JSON.stringify(notification))
             }

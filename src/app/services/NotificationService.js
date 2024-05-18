@@ -11,7 +11,6 @@ const NotificationService = {
                 vehicle_id: notify.vehicle.toString()
             }
         })
-        console.log(notifications)
         return notifications
     }
 }

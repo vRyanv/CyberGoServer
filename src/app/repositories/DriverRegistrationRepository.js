@@ -1,6 +1,11 @@
 const {Vehicle} = require("../schemas");
 
 const VehicleRepository = {
+    RefuseVehicle(vehicle_id, status, refuse_reason){
+        return Vehicle.findOneAndUpdate({_id:vehicle_id}, {status, refuse_reason})
+            .populate('driver')
+            .lean()
+    },
     UpdateVehicleStatus(vehicle_id, status){
         return Vehicle.findOneAndUpdate({_id:vehicle_id}, {status})
             .populate('driver')
@@ -31,6 +36,12 @@ const VehicleRepository = {
     },
     GetVehicleListByStatus(status){
         return Vehicle.find({status})
+            .select('vehicle_type license_plates status')
+            .populate({
+                path: 'driver',
+                select:'full_name id_number phone_number avatar',
+                populate: 'country'
+            })
             .sort({registration_date: 'desc'})
             .lean()
     }

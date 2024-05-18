@@ -10,9 +10,15 @@ const FCMService = require('./FCMService')
 
 const DriverRegistrationService = {
     async ResolveRegistration(vehicle_id, status, title, content) {
+        console.log(vehicle_id, status, title, content)
         let vehicle
         try {
-            vehicle = await DriverRegistrationRepository.UpdateVehicleStatus(vehicle_id, status)
+            if(status === VehicleStatus.ACCEPTED){
+                vehicle = await DriverRegistrationRepository.UpdateVehicleStatus(vehicle_id, status)
+            } else {
+                vehicle = await DriverRegistrationRepository.RefuseVehicle(vehicle_id, status, content)
+            }
+
         } catch (error) {
             console.log('UpdateVehicleStatus error::', error)
             return false
@@ -50,6 +56,7 @@ const DriverRegistrationService = {
         return true
     },
     GetDriverRegistrationList(status = VehicleStatus.ALL) {
+        console.log(status)
         if (status === VehicleStatus.ALL) {
             return DriverRegistrationRepository.GetVehicleList()
         }

@@ -1,6 +1,15 @@
 const {Vehicle} = require('../schemas')
 const {VehicleStatus} = require('../constant')
 const VehicleRepository = {
+    GetVehicleStatistic(from_date, to_date){
+        return Vehicle.find({
+            status: VehicleStatus.ACCEPTED,
+            createdAt: {
+                $gte: from_date,
+                $lte: to_date,
+            }
+        }).lean()
+    },
     FindByUserId(user_id){
         return Vehicle.find({driver:user_id}).lean()
     },

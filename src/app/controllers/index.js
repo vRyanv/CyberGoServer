@@ -9,8 +9,10 @@ const RatingController = require('./RatingController')
 const ChatController = require('./ChatController')
 const UserManagementController = require('./admin/UserManagementController')
 const NotificationController = require('./NotificationController')
+const DashboardController = require('./admin/DashboardController')
 
 module.exports = {
+    DashboardController,
     NotificationController,
     UserManagementController,
     ChatController,
