@@ -15,14 +15,14 @@ let transporter = nodemailer.createTransport({
     }
 });
 
-module.exports = async (from_mail, to_mail, subject, content) => {
-
-    return await transporter.sendMail({
+module.exports = (from_mail, to_mail, subject, content) => {
+    transporter.sendMail({
         from: from_mail,
         to: to_mail,
         subject: subject,
         html: content,
         amp: content,
-    })
+    }).then(result => console.log("SEND MAIL: ", result))
+        .catch(err => console.log("SEND MAIL ERROR: ", err))
 }
 

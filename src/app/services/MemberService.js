@@ -5,7 +5,7 @@ const {
   NotificationRepository,
 } = require("../repositories");
 const { Helper } = require("../utils");
-const { MemberStatus, NotificationType, SocketEvent } = require("../constant");
+const { MemberStatus, NotificationType, SocketEvent, FirebaseType } = require("../constant");
 const FCMService = require("./FCMService");
 
 const MemberService = {
@@ -43,9 +43,10 @@ const MemberService = {
         avatar: notification.avatar,
         title: notification.title,
         content: notification.content,
+        firebase_type: FirebaseType.NOTIFICATION
       };
       const { firebase_token } = trip.trip_owner;
-      if (firebase_token != "") {
+      if (firebase_token !== "") {
         FCMService.SendSingleNotification({ ...notification }, firebase_token);
       }
 
@@ -91,10 +92,11 @@ const MemberService = {
         avatar: notification.avatar,
         title: notification.title,
         content: notification.content,
+        firebase_type: FirebaseType.NOTIFICATION
       };
 
       const { firebase_token } = result_task[1];
-      if (firebase_token != "") {
+      if (firebase_token !== "") {
         FCMService.SendSingleNotification({ ...notification }, firebase_token);
       }
       const member_socket = __user_sockets.get(member.user_id.toString());
@@ -143,10 +145,11 @@ const MemberService = {
         avatar: notification.avatar,
         title: notification.title,
         content: notification.content,
+        firebase_type: FirebaseType.NOTIFICATION
       };
       const member_user = result[1];
       const { firebase_token } = member_user.user;
-      if (firebase_token != "") {
+      if (firebase_token !== "") {
         FCMService.SendSingleNotification({ ...notification }, firebase_token);
       }
       if (member_user.user.online_status) {
@@ -199,9 +202,10 @@ const MemberService = {
             avatar: new_notification.avatar,
             title: new_notification.title,
             content: new_notification.content,
+            firebase_type: FirebaseType.NOTIFICATION
           };
 
-          if (firebase_token != "") {
+          if (firebase_token !== "") {
             FCMService.SendSingleNotification(
               { ...notification },
               firebase_token

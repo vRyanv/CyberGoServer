@@ -3,7 +3,7 @@ const {RatingRepository, UserRepository} = require('../repositories')
 const RatingService = {
     async GetRatingList(user_id){
         console.log(user_id)
-        let rating_list = await RatingRepository.GetratingList(user_id)
+        let rating_list = await RatingRepository.GetRatingList(user_id)
        
         rating_list = rating_list.map(rating => {
             return {
@@ -29,7 +29,7 @@ const RatingService = {
         }
 
         await RatingRepository.Create(Rating)
-        const rating_list = await RatingRepository.GetratingList(user_receive)
+        const rating_list = await RatingRepository.GetRatingList(user_receive)
 
         try{
             let total_star = 0

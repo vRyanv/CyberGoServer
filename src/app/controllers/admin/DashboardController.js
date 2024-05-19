@@ -14,7 +14,18 @@ const DashboardController = {
             })
     },
     GetGeneralStatisticsAction(req, res){
-
+        DashboardService.GetGeneralStatistics()
+            .then(general_statistic => {
+                console.log(general_statistic)
+                return res.status(200).json({code: StatusCode.OK, general_statistic})
+            })
+    },
+    GetRatingStatisticsAction(req, res){
+        DashboardService.GetRatingStatistics()
+            .then(rating_statistic => {
+                console.log(rating_statistic)
+                return res.status(200).json({code: StatusCode.OK, rating_statistic})
+            })
     }
 }
 

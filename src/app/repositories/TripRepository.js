@@ -1,6 +1,9 @@
 const {Trip} = require("../schemas");
 const {MemberStatus, TripStatus} = require("../constant");
 const TripRepository = {
+    CountTripFinish(){
+        return Trip.countDocuments({status: TripStatus.FINISH})
+    },
     FindTripListStatistic(from_date, to_date) {
         return Trip.find({
             start_date: {

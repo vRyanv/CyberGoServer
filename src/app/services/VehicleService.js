@@ -1,5 +1,14 @@
 const {VehicleRepository} = require('../repositories')
 const VehicleService = {
+    async GetVehicleDetail(params){
+        const {vehicle_id} = params
+        try{
+            return await VehicleRepository.FindById(vehicle_id)
+        } catch (err){
+            console.log(err)
+            return false
+        }
+    },
     async GetVehicleList(user_id){
         try {
             const vehicle_list = await VehicleRepository.GetAllVehicleOfUser(user_id)

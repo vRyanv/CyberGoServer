@@ -14,9 +14,11 @@ const NotificationType = require('./NotificationType')
 const SystemDefault = require('./SystemDefault')
 const MemberStatus = require('./MemberStatus')
 const TripStatus = require('./TripStatus')
+const FirebaseType = require('./FirebaseType')
 
 const DEFAULT_AVATAR = 'default_avatar.png'
 module.exports = {
+    FirebaseType,
     TripStatus,
     MemberStatus,
     SystemDefault,

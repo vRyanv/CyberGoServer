@@ -16,7 +16,6 @@ const {
 } = require("../repositories");
 
 const {JWT, SecurityUtil, FileUtil} = require("../utils");
-const NotifcationRepository = require("../repositories/NotificationRepository");
 
 const UserService = {
     async UpdatePassword(user_id, body) {
@@ -109,18 +108,12 @@ const UserService = {
             return false;
         }
     },
-    async DriverRegistration(
-        user,
-        vehicle_name,
-        vehicle_type,
-        license_plates,
-        files
-    ) {
+    async DriverRegistration(user, vehicle_name, vehicle_type, license_plates,files) {
         const vehicle_registration_certificate = {
             front_vehicle_registration_certificate:
             files.front_vehicle_registration_certificate[0].filename,
             back_vehicle_registration_certificate:
-            files.front_vehicle_registration_certificate[0].filename,
+            files.back_vehicle_registration_certificate[0].filename,
         };
         const driving_licenses = {
             front_driving_license: files.front_driving_license[0].filename,
@@ -155,7 +148,7 @@ const UserService = {
                 type: NotificationType.ADMIN,
             }
 
-            const create_notify_task = NotifcationRepository.CreateNotification(notification);
+            const create_notify_task = NotificationRepository.CreateNotification(notification);
             const get_user_notify_task = UserRepository.FindById(user.id)
             const result = await Promise.all([create_notify_task, get_user_notify_task])
             notification = result[0]
@@ -177,7 +170,7 @@ const UserService = {
             }
 
             const admin_socket = FindAdminSocket();
-            // console.log(admin_socket)
+            console.log(admin_socket)
             if (admin_socket) {
                 admin_socket.emit(SocketEvent.NOTIFICATION, JSON.stringify(notification))
             }
@@ -244,71 +237,7 @@ const UserService = {
     },
     Profile(user_id) {
         return UserRepository.FindById(user_id);
-    },
-    async SignIn(email, password) {
-        let user = await UserRepository.FindByEmail(email);
-        if (user != null && user.account_status === AccountStatus.VERIFY) {
-            return StatusCode.VERIFY;
-        }
-
-        if (!user) {
-            return StatusCode.NOT_FOUND;
-        }
-
-        const is_valid_pass = await SecurityUtil.Compare(password, user.password);
-        if (!is_valid_pass) {
-            return StatusCode.NOT_FOUND;
-        }
-
-        const token_object = {
-            id: user._id,
-            role: user.role,
-        };
-        const phone_number = user.country.prefix + user.phone_number;
-        return {
-            token: JWT.Create(token_object),
-            user_id: user._id.toString(),
-            avatar: user.avatar,
-            role: user.role,
-            full_name: user.full_name,
-            phone_number,
-        };
-    },
-    async SignUp(user) {
-        const email_used = await UserRepository.FindByEmail(user.email);
-        if (
-            email_used != null &&
-            email_used.account_status === AccountStatus.VERIFY &&
-            email_used.otp_code !== 0
-        ) {
-            return StatusCode.VERIFY;
-        }
-
-        let phone_number_existed = await UserRepository.FindByPhoneNumber(
-            user.phone_number
-        );
-        if (phone_number_existed) {
-            return ErrorType.PHONE_EXISTED;
-        }
-
-        if (user.password !== user.confirm_password) {
-            return ErrorType.PASS_NOT_MATCH_CONFIRM_PPASS;
-        }
-
-        let country = await CountryRepository.FindCountryByPrefix(
-            user.number_prefix
-        );
-
-        user.country = country._id;
-        user.password = await SecurityUtil.Hash(user.password);
-        try {
-            const new_user = await UserRepository.Create(user);
-            return {new_user};
-        } catch (error) {
-            console.log(error);
-            return null;
-        }
-    },
+    }
 };
 
 module.exports = UserService;

@@ -5,14 +5,14 @@ const {
 } = require("../repositories");
 const MapService = require("./MapService");
 const {Helper} = require("../utils");
-const {SocketEvent, TripStatus, SystemDefault, NotificationType} = require("../constant");
+const {SocketEvent, TripStatus, FirebaseType, NotificationType} = require("../constant");
 const FCMService = require("./FCMService");
 
 const tripService = {
-    async DeleteTrip(user, params){
+    async DeleteTrip(user, params) {
         const {trip_id} = params
         const trip = await TripRepository.FindAndDeleteTrip(user.id, trip_id)
-        
+
         const DeleteAndNotifyToMember = async (owner_avatar, trip_name, members) => {
             members.map(async member => {
                 let notification = {
@@ -21,34 +21,35 @@ const tripService = {
                     avatar: owner_avatar,
                     content: trip_name,
                     type: NotificationType.USER,
-                  }
-        
-                  const create_notify_task = NotificationRepository.CreateNotification(notification)
-                  const delete_member_task = MemberRepository.RemoveMemberRequest(member._id.toString())
-                  const result = await Promise.all([create_notify_task, delete_member_task])
-                  notification = result[0]
-                  notification = {
+                }
+
+                const create_notify_task = NotificationRepository.CreateNotification(notification)
+                const delete_member_task = MemberRepository.RemoveMemberRequest(member._id.toString())
+                const result = await Promise.all([create_notify_task, delete_member_task])
+                notification = result[0]
+                notification = {
                     _id: notification._id.toString(),
                     datetime: notification.createdAt.getTime().toString(),
                     avatar: notification.avatar,
                     title: notification.title,
                     content: notification.content,
-                  };
-                  const { firebase_token, _id} = member.user
-                  if (firebase_token != "") {
-                    FCMService.SendSingleNotification({ ...notification }, firebase_token);
-                  }
-                  const member_socket = __user_sockets.get(_id.toString());
-                  if (member_socket) {
+                    firebase_type: FirebaseType.NOTIFICATION
+                };
+                const {firebase_token, _id} = member.user
+                if (firebase_token !== "") {
+                    FCMService.SendSingleNotification({...notification}, firebase_token);
+                }
+                const member_socket = __user_sockets.get(_id.toString());
+                if (member_socket) {
                     console.log("member_socket", member_socket)
                     member_socket.emit(SocketEvent.DELETE_TRIP);
-                  }
+                }
             })
         }
 
         const DeleteDestination = async (destinations) => {
             const des_ids = []
-            destinations.map( des => {
+            destinations.map(des => {
                 des_ids.push(des._id)
             })
             return DestinationRepository.DeleteMany(des_ids)
@@ -58,15 +59,15 @@ const tripService = {
         const delete_and_notify_task = DeleteAndNotifyToMember(trip.trip_owner.avatar, trip.name, trip.members)
         const delete_destination = DeleteDestination(trip.destinations)
 
-        try{
+        try {
             await Promise.all([delete_and_notify_task, delete_destination])
             return true
-        } catch (error){
+        } catch (error) {
             console.log(error)
             return false
         }
     },
-    async UpdateTripLocation(user, body){
+    async UpdateTripLocation(user, body) {
         console.log(body);
         const {
             trip_id,
@@ -113,15 +114,15 @@ const tripService = {
         try {
             const result_update_trip = TripRepository.UpdateInformation(user.id, trip_id, update_trip)
             const result_update_destination = DestinationRepository.Update(_id, update_destination)
-            await Promise.all([result_update_trip,result_update_destination])
+            await Promise.all([result_update_trip, result_update_destination])
             return true
-        } catch (error){
+        } catch (error) {
             console.log(error);
             return false
         }
 
     },
-    async UpdateInformation(user, body){
+    async UpdateInformation(user, body) {
         const trip_owner = user.id
         let {trip_id, price, start_date, start_time, trip_name, description} = body
 
@@ -132,13 +133,13 @@ const tripService = {
             description,
         }
 
-        if(start_date){
+        if (start_date) {
             update_trip.start_date = new Date(start_date)
         }
 
         try {
             return await TripRepository.UpdateInformation(trip_owner, trip_id, update_trip)
-        } catch (error){
+        } catch (error) {
             console.log(error)
             return false
         }
@@ -159,11 +160,11 @@ const tripService = {
                     }
                 }
             }
-        }) 
+        })
 
         function CreateTripResponse(trip) {
-            const members = [] 
-            trip.members.map(member => { 
+            const members = []
+            trip.members.map(member => {
                 members.push({
                     member_id: member._id.toString(),
                     user_id: member.user._id.toString(),
@@ -299,21 +300,23 @@ const tripService = {
                         avatar: notification.avatar,
                         title: notification.title,
                         content: notification.content,
+                        firebase_type: FirebaseType.NOTIFICATION
                     }
 
-                    if (firebase_token != "") {
-                        FCMService.SendSingleNotification({...notification}, member.user.firebase_token)
-                      }
-            
+                    const {firebase_token} = member.user
+                    if (firebase_token !== "") {
+                        FCMService.SendSingleNotification({...notification}, firebase_token)
+                    }
+
 
                     PushSocket(member.user, trip_id)
                 })
             }
         }
 
-        const PushSocket = (user, trip_id) =>{
+        const PushSocket = (user, trip_id) => {
             console.log(user.online_status)
-            if(!user.online_status){
+            if (!user.online_status) {
                 return
             }
             const socket = __user_sockets.get(user._id.toString())

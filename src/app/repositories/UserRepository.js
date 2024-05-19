@@ -2,6 +2,9 @@ const {User} = require("../schemas");
 const {Role} = require("../constant");
 
 const UserRepository = {
+    CountAllUser(){
+        return User.countDocuments({role:Role.USER})
+    },
     FindUserDetail(user_id){
         return User.findById(user_id)
             .populate('country')

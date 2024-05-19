@@ -18,7 +18,22 @@ const UserManagementController = {
             })
     },
     BanUserAction(req, res) {
-
+        UserManagementService.UpdateAccountStatus(req.body)
+            .then(result => {
+                if(result){
+                    return res.status(200).json({code: StatusCode.UPDATED});
+                }
+                return res.status(200).json({code: StatusCode.NOT_FOUND});
+            })
+    },
+    UnlockUserAction(req, res) {
+        UserManagementService.UnlockUser(req.body.user_id)
+            .then(result => {
+                if(result){
+                    return res.status(200).json({code: StatusCode.UPDATED});
+                }
+                return res.status(200).json({code: StatusCode.NOT_FOUND});
+            })
     }
 }
 

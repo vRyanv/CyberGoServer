@@ -1,9 +1,8 @@
 const {
     VehicleStatus,
-    StatusCode,
-    SocketEvent,
     NotificationType,
-    SystemDefault
+    SystemDefault,
+    FirebaseType
 } = require("../constant");
 const {DriverRegistrationRepository, NotificationRepository} = require("../repositories");
 const FCMService = require('./FCMService')
@@ -47,9 +46,10 @@ const DriverRegistrationService = {
             avatar: notification.avatar,
             title: notification.title,
             content: notification.content,
+            firebase_type: FirebaseType.NOTIFICATION
         }
 
-        if (firebase_token != "") {
+        if (firebase_token !== "") {
             console.log("firebase_token", firebase_token)
             FCMService.SendSingleNotification({...notification}, firebase_token)
         }
@@ -64,6 +64,7 @@ const DriverRegistrationService = {
     },
     async GetDriverRegistrationDetail(vehicle_id) {
         try {
+            console.log(vehicle_id)
             return await DriverRegistrationRepository.GetDriverRegistrationDetail(vehicle_id)
         } catch (error) {
             console.error(error)

@@ -1,6 +1,12 @@
 const {Vehicle} = require('../schemas')
 const {VehicleStatus} = require('../constant')
 const VehicleRepository = {
+    FindById(vehicle_id){
+        return Vehicle.findById(vehicle_id).lean()
+    },
+    CountVehicleAccepted(){
+        return Vehicle.countDocuments({status: VehicleStatus.ACCEPTED})
+    },
     GetVehicleStatistic(from_date, to_date){
         return Vehicle.find({
             status: VehicleStatus.ACCEPTED,
