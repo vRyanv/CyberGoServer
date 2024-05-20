@@ -9,7 +9,22 @@ require('colors');
 const routes = require('./app/routes')
 
 const app = express()
-app.use(cors())
+const option_cors = {
+    origin: '*',
+    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
+    withCredentials: false,
+    optionsSuccessStatus: 204
+}
+
+app.use(function(req, res, next) {
+    console.log('here')
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+ });
+app.use(cors(option_cors))
+
 //[GET] image from public
 app.use(express.static(path.join(__dirname, 'public')))
 
