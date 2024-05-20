@@ -25,6 +25,7 @@ const DriverRegistrationService = {
         const {_id, firebase_token} = vehicle.driver
         const subject = title
         content = content + " " + vehicle.license_plates
+
         let notification = {
             user: _id.toString(),
             title: subject,

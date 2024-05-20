@@ -1,6 +1,12 @@
 const {Vehicle} = require('../schemas')
 const {VehicleStatus} = require('../constant')
 const VehicleRepository = {
+    DeleteVehicle(user_id, vehicle_id){
+      return Vehicle.updateOne(
+          {driver:user_id, _id:vehicle_id},
+          {status: VehicleStatus.DELETED}
+      )
+    },
     FindById(vehicle_id){
         return Vehicle.findById(vehicle_id).lean()
     },
@@ -20,7 +26,7 @@ const VehicleRepository = {
         return Vehicle.find({driver:user_id}).lean()
     },
     GetAllVehicleOfUser(user_id){
-        return Vehicle.find({driver: user_id})
+        return Vehicle.find({driver: user_id, status: {$ne: VehicleStatus.DELETED}})
             .sort({registration_date : 'desc'})
             .lean()
     },

@@ -1,5 +1,13 @@
 const {VehicleRepository} = require('../repositories')
 const VehicleService = {
+    async DeleteVehicle(user_id, vehicle_id){
+        try{
+            return await VehicleRepository.DeleteVehicle(user_id, vehicle_id)
+        } catch (error){
+            console.log(error)
+            return false
+        }
+    },
     async GetVehicleDetail(params){
         const {vehicle_id} = params
         try{

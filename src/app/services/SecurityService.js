@@ -4,7 +4,8 @@ const {SecurityUtil, JWT, Authenticator, Mailer} = require("../utils");
 
 const SecurityService = {
     async ResetPassword(body){
-        const {otp_code, email, new_pass} = body
+        console.log(body)
+        const {otp_code, email, new_password} = body
         const user = await UserRepository.FindByEmail(email)
         if(!user){
             return StatusCode.NOT_FOUND
@@ -20,7 +21,7 @@ const SecurityService = {
             return StatusCode.BAD_REQUEST
         }
 
-        const password = await SecurityUtil.Hash(new_pass)
+        const password = await SecurityUtil.Hash(new_password)
         await UserRepository.UpdateUserInformation(user._id.toString(), {password, otp_code: 0})
         return StatusCode.UPDATED
     },

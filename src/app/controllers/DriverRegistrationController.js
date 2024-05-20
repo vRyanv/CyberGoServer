@@ -3,9 +3,9 @@ const {StatusCode, VehicleStatus} = require("../constant");
 
 const DriverRegistrationController = {
     async RefuseRegistrationAction(req, res){
-        const {vehicle_id, refuse_reason} = req.body
+        const {vehicle_id, refuse_reason, license_plates} = req.body
         const title = 'Vehicle registration refused'
-        const content = `Hello, I am the admin of Cyber Go, Your registration was rejected for the following reason: ${refuse_reason}. License plates:`
+        const content = `Hello, I am the admin of Cyber Go, Your registration was rejected for the following reason: ${refuse_reason}. License plates: ${license_plates}`
         const result_refuse = await DriverRegistrationService.ResolveRegistration(
             vehicle_id,
             VehicleStatus.REFUSED,

@@ -1,6 +1,16 @@
 const {VehicleService} = require('../services')
 const {StatusCode} = require('../constant')
 const VehicleController = {
+    async DeleteVehicleAction(req, res){
+        const {vehicle_id} = req.params
+        VehicleService.DeleteVehicle(req.user.id, vehicle_id)
+            .then(result => {
+                if(result){
+                    return  res.status(StatusCode.OK).json({code: StatusCode.DELETED, vehicle_id})
+                }
+                return  res.status(StatusCode.OK).json({code: StatusCode.BAD_REQUEST})
+            })
+    },
     async GetVehicleDetailAction(req, res){
         VehicleService.GetVehicleDetail(req.params)
             .then(vehicle => {
