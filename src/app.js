@@ -73,7 +73,7 @@ SocketService(io)
 
 const {ServerEnv} = require('./env')
 const PORT = ServerEnv.SERVER_PORT_DEV;
-const IP = ServerEnv.SERVER_IP_DEV
+const IP = ServerEnv.SERVER_IP_PRO
 server.listen(
     PORT,
     IP,

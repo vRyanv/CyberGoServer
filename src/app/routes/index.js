@@ -13,7 +13,7 @@ const {Auth} = require("../middleware");
 const {Role, StatusCode} = require("../constant");
 
 module.exports = (app) => {
-    app.post("/resend-otp-code", (req, res) => {
+    app.post("/api/resend-otp-code", (req, res) => {
         const {national_phone} = req.body
         Twilio.SendOTP(national_phone).then((result) => {
             console.log(result);
@@ -28,47 +28,41 @@ module.exports = (app) => {
     });
 
     app.use(
-        "/chat",
+        "/api/chat",
         (req, res, next) => Auth(req, res, next, [Role.USER, Role.ADMIN]),
         ChatRouter
     );
     app.use(
-        "/rating",
+        "/api/rating",
         (req, res, next) => Auth(req, res, next, [Role.USER, Role.ADMIN]),
         RatingRouter
     );
 
     app.use(
-        "/trip",
+        "/api/trip",
         (req, res, next) => Auth(req, res, next, [Role.USER, Role.ADMIN]),
         TripRouter
     );
 
-    app.use("/security", SecurityRouter);
+    app.use("/api/security", SecurityRouter);
 
-    app.use("/map", MapRouter);
+    app.use("/api/map", MapRouter);
 
     app.use(
-        "/user",
+        "/api/user",
         (req, res, next) => Auth(req, res, next, [Role.USER, Role.ADMIN]),
         UserRouter
     );
 
     app.use(
-        "/admin",
+        "/api/admin",
         (req, res, next) => Auth(req, res, next, [Role.ADMIN]),
         AdminRouter
     );
 
-    app.use('/notification', NotificationRouter)
+    app.use('/api/notification', NotificationRouter)
 
-    app.post("/test", (req, res) => {
-        console.log(req.header("Authorization"));
-        console.log(req.headers);
-        res.send({data: req.header});
-    });
-
-    app.use("/*", (req, res) => {
+    app.use("/api/*", (req, res) => {
         res
             .status(400)
             .json({code: StatusCode.NOT_FOUND, message: "api not found"});
